@@ -446,26 +446,55 @@ input[type='number'] {
 }
 
 .theme-toggle {
+  position: relative;
+  display: inline-flex;
+  width: 4rem;
+  height: 2rem;
   flex: 0 0 auto;
-  padding: 0.48rem 0.72rem;
-  border: 1px solid transparent;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.48rem;
+  border: 1px solid var(--control-border);
   border-radius: 999px;
-  background: transparent;
+  background: var(--control-background);
   color: var(--text-secondary);
-  font: inherit;
-  font-size: 0.76rem;
-  font-weight: 650;
   cursor: pointer;
   transition:
     border-color 150ms ease,
-    background-color 150ms ease,
-    color 150ms ease;
+    background-color 150ms ease;
 }
 
 .theme-toggle:hover {
-  border-color: var(--card-border);
-  background: var(--control-background);
-  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--control-border));
+}
+
+.theme-icon {
+  position: relative;
+  z-index: 1;
+  width: 0.82rem;
+  height: 0.82rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.theme-thumb {
+  position: absolute;
+  z-index: 0;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 1.48rem;
+  height: 1.48rem;
+  border-radius: 50%;
+  background: var(--page-background);
+  box-shadow: 0 1px 0.25rem rgb(15 23 42 / 20%);
+  transition: transform 180ms ease;
+}
+
+:host(.dark-theme) .theme-thumb {
+  transform: translateX(1.9rem);
 }
 
 .primary-action {
@@ -946,13 +975,6 @@ input:disabled {
     display: none;
   }
 
-  .theme-toggle {
-    max-width: 7.5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   main {
     width: min(100% - 1.25rem, 72rem);
     padding-top: 3rem;
@@ -985,6 +1007,8 @@ input:disabled {
   .navigation-panel,
   .primary-action,
   .secondary-action,
+  .theme-icon,
+  .theme-thumb,
   .theme-toggle {
     transition: none;
     animation: none;

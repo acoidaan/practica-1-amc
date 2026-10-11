@@ -683,4 +683,4 @@ La evidencia experimental confirma el modelo: la poda horizontal domina en el ca
 
 ## Referencia técnica
 
-La documentación generada de tipos, funciones y módulos está disponible en la <a href="/documentacion/api/">referencia TypeDoc</a>.
+La documentación generada de tipos, funciones y módulos está disponible en la <a href="https://practica-1-amc.vercel.app/documentacion/api/">referencia TypeDoc</a>.

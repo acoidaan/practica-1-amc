@@ -17,7 +17,7 @@ hero:
       link: /guia-uso
     - theme: alt
       text: API TypeScript
-      link: /api/
+      link: https://practica-1-amc.vercel.app/documentacion/api/
     - theme: alt
       text: Descargar PDF
       link: /downloads/memoria-practica-1-amc.pdf

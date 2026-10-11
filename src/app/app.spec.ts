@@ -55,7 +55,7 @@ describe('App', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should start in light mode and persist a manual theme change', async () => {
+  it('should render an accessible theme switch and persist a manual theme change', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
 
@@ -65,7 +65,13 @@ describe('App', () => {
 
     expect(app.isDarkTheme).toBe(false);
     expect(host.classList.contains('dark-theme')).toBe(false);
-    expect(button?.textContent).toContain('Usar modo oscuro');
+    expect(button?.type).toBe('button');
+    expect(button?.getAttribute('aria-label')).toBe('Modo oscuro');
+    expect(button?.getAttribute('aria-pressed')).toBe('false');
+    expect(button?.getAttribute('title')).toBe('Usar modo oscuro');
+    expect(button?.querySelectorAll('.theme-icon')).toHaveLength(2);
+    expect(button?.querySelector('.theme-thumb')).not.toBeNull();
+    expect(button?.textContent?.trim()).toBe('');
 
     button?.click();
     await fixture.whenStable();
@@ -73,7 +79,9 @@ describe('App', () => {
     expect(app.isDarkTheme).toBe(true);
     expect(host.classList.contains('dark-theme')).toBe(true);
     expect(localStorage.getItem('amc-theme')).toBe('dark');
-    expect(button?.textContent).toContain('Usar modo claro');
+    expect(button?.getAttribute('aria-label')).toBe('Modo oscuro');
+    expect(button?.getAttribute('aria-pressed')).toBe('true');
+    expect(button?.getAttribute('title')).toBe('Usar modo claro');
   });
 
   it('should restore a stored dark theme', async () => {
@@ -133,6 +141,11 @@ describe('App', () => {
     expect(compiled.textContent).toContain('No hay ningún dataset cargado');
     expect(compiled.querySelector('button[type="submit"]')).not.toBeNull();
     expect(compiled.querySelector('.theme-toggle')).not.toBeNull();
+    expect(
+      Array.from(compiled.querySelector('.nav-actions')?.children ?? []).map((element) =>
+        element.classList.item(0),
+      ),
+    ).toEqual(['theme-toggle', 'menu-shell', 'github-link']);
     expect(compiled.querySelector<HTMLAnchorElement>('.github-link')?.href).toBe(
       'https://github.com/acoidaan/practica-1-amc',
     );
