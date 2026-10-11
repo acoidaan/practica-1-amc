@@ -1,0 +1,635 @@
+<header class="site-header">
+  <nav class="site-nav" aria-label="Navegación principal">
+    <a class="brand" href="#inicio" aria-label="Ir al inicio">
+      <span class="brand-mark" aria-hidden="true">P1</span>
+      <span>Closest Pair</span>
+    </a>
+
+    <div class="nav-actions">
+      <a
+        class="github-link"
+        href="https://github.com/acoidaan/practica-1-amc"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir el repositorio en GitHub"
+        title="Ver código en GitHub"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 2C6.48 2 2 6.59 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.05-.01-1.9-2.78.62-3.37-1.21-3.37-1.21-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .08 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.09a9.3 9.3 0 0 1 2.5.35c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.64 1.03 2.76 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.38-.01 2.49-.01 2.83 0 .27.18.59.69.49A10.27 10.27 0 0 0 22 12.25C22 6.59 17.52 2 12 2Z"
+          />
+        </svg>
+      </a>
+
+      <button
+        class="theme-toggle"
+        type="button"
+        (click)="toggleTheme()"
+        [attr.aria-pressed]="isDarkTheme"
+      >
+        @if (isDarkTheme) {
+          Usar modo claro
+        } @else {
+          Usar modo oscuro
+        }
+      </button>
+
+      <div class="menu-shell" (mouseenter)="openMenu()" (mouseleave)="closeMenu()">
+        <button
+          class="menu-button"
+          type="button"
+          aria-controls="navigation-panel"
+          [attr.aria-label]="isMenuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'"
+          [attr.aria-expanded]="isMenuOpen"
+          [class.menu-button-open]="isMenuOpen"
+          (click)="toggleMenu()"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        @if (isMenuOpen) {
+          <div id="navigation-panel" class="navigation-panel">
+            <p class="navigation-label">Explorar la práctica</p>
+            <a href="#inicio" (click)="closeMenu()">Inicio</a>
+            <a href="#preparar-dataset" (click)="closeMenu()">Preparar dataset</a>
+            <a href="#dataset" (click)="closeMenu()">Dataset activo</a>
+            <a href="#experimento" (click)="closeMenu()">Estudio experimental</a>
+            <a href="/documentacion/" (click)="closeMenu()">Documentación</a>
+          </div>
+        }
+      </div>
+    </div>
+  </nav>
+</header>
+
+@if (isMenuOpen) {
+  <button
+    class="menu-backdrop"
+    type="button"
+    tabindex="-1"
+    aria-label="Cerrar menú"
+    (click)="closeMenu()"
+  ></button>
+}
+
+<main id="inicio">
+  <section class="hero" aria-labelledby="page-title">
+    <p class="eyebrow">Algorítmica y Modelos de Computación</p>
+    <h1 id="page-title">Práctica 1 - Par de puntos más cercano</h1>
+    <p class="hero-copy">
+      Carga o genera un conjunto de puntos y compara cuatro estrategias algorítmicas en una misma
+      experiencia visual.
+    </p>
+    <a class="hero-link" href="#preparar-dataset"
+      >Comenzar análisis <span aria-hidden="true">↓</span></a
+    >
+  </section>
+
+  <div id="preparar-dataset" class="source-grid section-anchor">
+    <section class="card">
+      <div class="section-heading">
+        <span class="step-number">01</span>
+        <div>
+          <h2>Cargar dataset TSPLIB</h2>
+          <p>Selecciona un fichero compatible desde tu equipo.</p>
+        </div>
+      </div>
+
+      <label class="file-picker">
+        <span>Seleccionar archivo .tsp</span>
+        <input type="file" accept=".tsp" (change)="onFileSelected($event)" />
+      </label>
+
+      @if (loadError) {
+        <p class="alert" role="alert">Error de carga: {{ loadError }}</p>
+      }
+    </section>
+
+    <section class="card">
+      <div class="section-heading">
+        <span class="step-number">02</span>
+        <div>
+          <h2>Generar dataset aleatorio</h2>
+          <p>Define el tamaño y el tipo de distribución.</p>
+        </div>
+      </div>
+
+      <form
+        class="generation-form"
+        (submit)="onGenerateDataset($event, sizeInput.value, sameXInput.checked)"
+      >
+        <label class="field" for="dataset-size">
+          <span>Número de puntos</span>
+          <input #sizeInput id="dataset-size" type="number" min="1" step="1" value="100" required />
+        </label>
+
+        <label class="mode-option" for="same-x">
+          <input #sameXInput id="same-x" type="checkbox" />
+          <span>
+            <strong>Misma coordenada x</strong>
+            <small>Genera el caso límite utilizado para comparar estrategias.</small>
+          </span>
+        </label>
+
+        <button class="primary-action" type="submit">Generar y descargar dataset</button>
+      </form>
+
+      @if (generationError) {
+        <p class="alert" role="alert">{{ generationError }}</p>
+      }
+    </section>
+  </div>
+
+  <section id="dataset" class="card dataset-card section-anchor">
+    <div class="section-heading">
+      <span class="step-number">03</span>
+      <div>
+        <h2>Dataset</h2>
+        <p>Conjunto de puntos activo para ejecutar los algoritmos.</p>
+      </div>
+    </div>
+
+    @if (dataset) {
+      <div class="dataset-meta">
+        <p>Archivo: {{ dataset.fileName }}</p>
+        <p>Número de puntos: {{ dataset.points.length }}</p>
+      </div>
+
+      <ul class="point-list">
+        @for (point of dataset.points; track point.id) {
+          <li>Punto {{ point.id }}: ({{ point.x }}, {{ point.y }})</li>
+        }
+      </ul>
+
+      <button
+        id="check-strategies"
+        class="primary-action"
+        type="button"
+        (click)="runStrategyCheck()"
+      >
+        Comprobar las cuatro estrategias
+      </button>
+
+      @if (strategyCheckError) {
+        <p class="alert" role="alert">{{ strategyCheckError }}</p>
+      }
+    } @else {
+      <p class="empty-state">No hay ningún dataset cargado.</p>
+    }
+  </section>
+
+  @if (pointPlot) {
+    <section class="card plot-card">
+      <div class="section-heading">
+        <span class="step-number">04</span>
+        <div>
+          <h2>Visualización del dataset</h2>
+          <p>Representación proporcional de los puntos en el plano.</p>
+        </div>
+      </div>
+
+      <figure class="point-figure">
+        <svg
+          class="point-plot"
+          [attr.viewBox]="'0 0 ' + pointPlot.width + ' ' + pointPlot.height"
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          aria-labelledby="point-plot-title"
+        >
+          <title id="point-plot-title">
+            Puntos del dataset y segmento de la pareja mínima cuando está disponible
+          </title>
+
+          @if (pointPlot.segment) {
+            <line
+              class="closest-segment"
+              [attr.x1]="pointPlot.segment.x1"
+              [attr.y1]="pointPlot.segment.y1"
+              [attr.x2]="pointPlot.segment.x2"
+              [attr.y2]="pointPlot.segment.y2"
+            ></line>
+          }
+
+          @for (plottedPoint of pointPlot.points; track plottedPoint.point.id) {
+            <circle
+              class="plot-point"
+              [class.closest-point]="plottedPoint.isClosest"
+              [attr.cx]="plottedPoint.plotX"
+              [attr.cy]="plottedPoint.plotY"
+              [attr.r]="plottedPoint.isClosest ? 6 : 3"
+            >
+              <title>
+                Punto {{ plottedPoint.point.id }}: ({{ plottedPoint.point.x }},
+                {{ plottedPoint.point.y }})
+              </title>
+            </circle>
+          }
+        </svg>
+
+        <figcaption>
+          @if (pointPlot.segment) {
+            La línea une la pareja mínima encontrada por la estrategia exhaustiva.
+          } @else {
+            Ejecuta las estrategias para resaltar la pareja mínima.
+          }
+        </figcaption>
+      </figure>
+    </section>
+  }
+
+  @if (strategyCheck) {
+    <section class="card result-card">
+      <div class="section-heading">
+        <span class="step-number">05</span>
+        <div>
+          <h2>Comprobación de estrategias</h2>
+          <p>Resultados obtenidos sobre copias independientes del mismo dataset.</p>
+        </div>
+      </div>
+
+      @if (strategyCheck.distancesMatch) {
+        <p class="status-message success-message">
+          Las cuatro estrategias coinciden en la distancia mínima.
+        </p>
+      } @else {
+        <p class="alert" role="alert">
+          Las estrategias no coinciden. Revisa los algoritmos antes de utilizar las exportaciones.
+        </p>
+      }
+
+      <div class="table-shell">
+        <table class="strategy-table">
+          <thead>
+            <tr>
+              <th scope="col">Estrategia</th>
+              <th scope="col">Punto 1</th>
+              <th scope="col">Punto 2</th>
+              <th scope="col">Distancia</th>
+              <th scope="col">Calculadas</th>
+              <th scope="col">Tiempo (ms)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (execution of strategyCheck.executions; track execution.id) {
+              <tr class="strategy-row" [attr.data-strategy]="execution.id">
+                <th scope="row">{{ execution.name }}</th>
+                <td class="point-cell">{{ formatPoint(execution.result.closestPair.first) }}</td>
+                <td class="point-cell">{{ formatPoint(execution.result.closestPair.second) }}</td>
+                <td class="numeric-cell distance-value">
+                  {{ formatDistance(execution.result.closestPair.distance) }}
+                </td>
+                <td class="numeric-cell calculations-value">
+                  {{ execution.result.distanceCalculations }}
+                </td>
+                <td class="numeric-cell time-value">
+                  {{ formatMilliseconds(execution.result.elapsedMilliseconds) }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="download-section">
+        <div>
+          <h3>Ficheros resultantes</h3>
+          <p>Descarga por separado el resultado producido por cada estrategia.</p>
+        </div>
+        <div class="download-grid">
+          @for (execution of strategyCheck.executions; track execution.id) {
+            <button
+              class="secondary-action download-action"
+              type="button"
+              [attr.data-file-name]="execution.outputFileName"
+              (click)="downloadStrategyOutput(execution)"
+            >
+              Descargar {{ execution.outputFileName }}
+            </button>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <section id="experimento" class="card experiment-card section-anchor">
+    <div class="section-heading">
+      <span class="step-number">06</span>
+      <div>
+        <h2>Estudio experimental</h2>
+        <p>Compara las cuatro estrategias sin bloquear la interfaz.</p>
+      </div>
+    </div>
+
+    <div class="experiment-settings">
+      <p>
+        Tallas: {{ experimentSizes.join(', ') }} · Repeticiones por talla:
+        {{ experimentRepetitions }}
+      </p>
+
+      <fieldset class="strategy-selection" [disabled]="isExperimentRunning">
+        <legend>Estrategias para comparar dos</legend>
+
+        <div class="strategy-selection-grid">
+          @for (strategy of experimentStrategies; track strategy.id) {
+            <label class="mode-option">
+              <input
+                #strategySelection
+                type="checkbox"
+                [checked]="selectedExperimentStrategyIds.includes(strategy.id)"
+                (change)="setExperimentStrategySelected(strategy.id, strategySelection.checked)"
+              />
+              <span>
+                <strong>{{ strategy.name }}</strong>
+              </span>
+            </label>
+          }
+        </div>
+
+        <p class="selection-hint">Seleccionadas: {{ selectedExperimentStrategyIds.length }} de 2</p>
+      </fieldset>
+
+      <label class="mode-option" for="experiment-same-x">
+        <input
+          #experimentSameX
+          id="experiment-same-x"
+          type="checkbox"
+          [disabled]="isExperimentRunning"
+        />
+        <span>
+          <strong>Misma coordenada x</strong>
+          <small>Ejecuta el estudio sobre el peor caso vertical.</small>
+        </span>
+      </label>
+    </div>
+
+    <div class="experiment-actions">
+      <button
+        id="run-experiment"
+        class="primary-action"
+        type="button"
+        [disabled]="isExperimentRunning"
+        (click)="runExperimentStudy(experimentSameX.checked, allExperimentStrategyIds)"
+      >
+        @if (isExperimentRunning) {
+          Estudio en curso
+        } @else {
+          Comparar las cuatro estrategias
+        }
+      </button>
+
+      <button
+        id="run-two-experiment"
+        class="secondary-action"
+        type="button"
+        [disabled]="isExperimentRunning || !canCompareTwoStrategies"
+        (click)="runExperimentStudy(experimentSameX.checked, selectedExperimentStrategyIds)"
+      >
+        Comparar las dos seleccionadas
+      </button>
+
+      @if (isExperimentRunning) {
+        <button
+          id="cancel-experiment"
+          class="secondary-action"
+          type="button"
+          (click)="cancelExperimentStudy()"
+        >
+          Cancelar
+        </button>
+      }
+    </div>
+
+    @if (isExperimentRunning) {
+      <div class="experiment-progress" aria-live="polite">
+        @if (experimentProgress) {
+          <progress
+            [value]="experimentProgress.completedExperiments"
+            [max]="experimentProgress.totalExperiments"
+          ></progress>
+          @if (experimentProgress.completedExperiments === 0) {
+            <p>
+              Preparando el primer experimento · 0 de
+              {{ experimentProgress.totalExperiments }} completados
+            </p>
+          } @else {
+            <p>
+              {{ experimentProgress.completedExperiments }} de
+              {{ experimentProgress.totalExperiments }} experimentos · talla
+              {{ experimentProgress.currentSize }} · repetición
+              {{ experimentProgress.currentRepetition }}
+            </p>
+          }
+        } @else {
+          <progress></progress>
+          <p>Preparando el primer experimento…</p>
+        }
+      </div>
+    }
+
+    @if (experimentError) {
+      <p class="alert" role="alert">{{ experimentError }}</p>
+    }
+
+    @if (experimentResult) {
+      <div class="experiment-results">
+        @if (experimentResultConfig; as resultConfig) {
+          <p class="experiment-result-summary">
+            Distribución:
+            <strong>{{ resultConfig.sameX ? 'misma coordenada x' : 'caso general' }}</strong>
+            · {{ resultConfig.repetitions }} repeticiones por talla ·
+            {{ resultConfig.strategyIds.length }} estrategias
+          </p>
+        }
+
+        <h3>Tiempos medios</h3>
+        <div class="table-shell">
+          <table class="strategy-table experiment-table">
+            <thead>
+              <tr>
+                <th scope="col">Talla</th>
+                @for (strategy of experimentResultStrategies; track strategy.id) {
+                  <th scope="col">{{ strategy.name }} (ms)</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of experimentResult.rows; track row.size) {
+                <tr class="experiment-row">
+                  <th scope="row">{{ row.size }}</th>
+                  @for (strategy of row.strategies; track strategy.id) {
+                    <td class="numeric-cell experiment-time">
+                      {{ formatMilliseconds(strategy.averageElapsedMilliseconds) }}
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Distancias euclídeas calculadas</h3>
+        <div class="table-shell">
+          <table class="strategy-table experiment-table">
+            <thead>
+              <tr>
+                <th scope="col">Talla</th>
+                @for (strategy of experimentResultStrategies; track strategy.id) {
+                  <th scope="col">{{ strategy.name }} (media)</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of experimentResult.rows; track row.size) {
+                <tr class="experiment-calculation-row">
+                  <th scope="row">{{ row.size }}</th>
+                  @for (strategy of row.strategies; track strategy.id) {
+                    <td class="numeric-cell experiment-calculations">
+                      {{ formatAverageCalculations(strategy.averageDistanceCalculations) }}
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (experimentChart; as chart) {
+          <section class="experiment-chart-section" aria-labelledby="experiment-chart-title">
+            <h3 id="experiment-chart-title">Evolución del tiempo medio</h3>
+
+            <div class="experiment-chart-shell">
+              <svg
+                class="experiment-chart"
+                role="img"
+                aria-labelledby="experiment-chart-svg-title"
+                [attr.viewBox]="'0 0 ' + chart.width + ' ' + chart.height"
+              >
+                <title id="experiment-chart-svg-title">Tiempo medio por talla y estrategia</title>
+
+                @for (tick of chart.yTicks; track tick.value) {
+                  <line
+                    class="experiment-chart-grid"
+                    [attr.x1]="chart.plotLeft"
+                    [attr.x2]="chart.plotRight"
+                    [attr.y1]="tick.y"
+                    [attr.y2]="tick.y"
+                  />
+                  <text
+                    class="experiment-chart-tick"
+                    text-anchor="end"
+                    dominant-baseline="middle"
+                    [attr.x]="chart.plotLeft - 10"
+                    [attr.y]="tick.y"
+                  >
+                    {{ tick.label }}
+                  </text>
+                }
+
+                @for (tick of chart.xTicks; track tick.value) {
+                  <line
+                    class="experiment-chart-tick-mark"
+                    [attr.x1]="tick.x"
+                    [attr.x2]="tick.x"
+                    [attr.y1]="chart.plotBottom"
+                    [attr.y2]="chart.plotBottom + 6"
+                  />
+                  <text
+                    class="experiment-chart-tick"
+                    text-anchor="middle"
+                    [attr.x]="tick.x"
+                    [attr.y]="chart.plotBottom + 23"
+                  >
+                    {{ tick.value }}
+                  </text>
+                }
+
+                <line
+                  class="experiment-chart-axis"
+                  [attr.x1]="chart.plotLeft"
+                  [attr.x2]="chart.plotLeft"
+                  [attr.y1]="chart.plotTop"
+                  [attr.y2]="chart.plotBottom"
+                />
+                <line
+                  class="experiment-chart-axis"
+                  [attr.x1]="chart.plotLeft"
+                  [attr.x2]="chart.plotRight"
+                  [attr.y1]="chart.plotBottom"
+                  [attr.y2]="chart.plotBottom"
+                />
+
+                @for (series of chart.series; track series.id) {
+                  <polyline
+                    class="experiment-chart-line"
+                    fill="none"
+                    [attr.stroke]="series.color"
+                    [attr.points]="series.polylinePoints"
+                  />
+
+                  @for (point of series.points; track point.size) {
+                    <circle
+                      class="experiment-chart-point"
+                      [attr.cx]="point.x"
+                      [attr.cy]="point.y"
+                      [attr.fill]="series.color"
+                      r="4"
+                    >
+                      <title>
+                        {{ series.name }} · n={{ point.size }} ·
+                        {{ formatMilliseconds(point.averageElapsedMilliseconds) }} ms
+                      </title>
+                    </circle>
+                  }
+                }
+
+                <text
+                  class="experiment-chart-axis-title"
+                  text-anchor="middle"
+                  [attr.x]="chart.width / 2"
+                  [attr.y]="chart.height - 8"
+                >
+                  Talla
+                </text>
+                <text
+                  class="experiment-chart-axis-title"
+                  text-anchor="middle"
+                  transform="rotate(-90)"
+                  [attr.x]="-(chart.plotTop + chart.plotBottom) / 2"
+                  y="18"
+                >
+                  Tiempo medio (ms)
+                </text>
+              </svg>
+            </div>
+
+            <div class="experiment-chart-legend" aria-label="Leyenda">
+              @for (series of chart.series; track series.id) {
+                <span>
+                  <i [style.background-color]="series.color"></i>
+                  {{ series.name }}
+                </span>
+              }
+            </div>
+          </section>
+        }
+
+        <div class="experiment-export">
+          <div>
+            <h3>Exportar resultados</h3>
+            <p>Guarda la metodología y ambas medias en un fichero CSV.</p>
+          </div>
+          <button
+            id="download-experiment-results"
+            class="secondary-action"
+            type="button"
+            (click)="downloadExperimentResults()"
+          >
+            Descargar CSV
+          </button>
+        </div>
+      </div>
+    }
+  </section>
+</main>

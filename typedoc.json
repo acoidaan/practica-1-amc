@@ -1,0 +1,20 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/app/core"],
+  "entryPointStrategy": "expand",
+  "exclude": ["**/*.spec.ts"],
+  "tsconfig": "tsconfig.app.json",
+  "basePath": ".",
+  "disableGit": true,
+  "sourceLinkTemplate": "https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/{path}#L{line}",
+  "sourceLinkExternal": true,
+  "favicon": "public/favicon.svg",
+  "out": "docs/public/api",
+  "name": "Práctica 1 AMC · API TypeScript",
+  "readme": "none",
+  "categorizeByGroup": true,
+  "navigationLinks": {
+    "Memoria": "/documentacion/memoria.html",
+    "Aplicación": "/"
+  }
+}

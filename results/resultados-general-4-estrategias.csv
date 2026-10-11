@@ -1,0 +1,17 @@
+distribucion,repeticiones,talla,estrategia_id,estrategia,metodo_medicion,ejecuciones_por_medicion,tiempo_medio_ms,distancias_medias
+general,10,200,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,100,0.134,19900
+general,10,200,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,100,0.032,297.8
+general,10,200,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,100,0.057,685.8
+general,10,200,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,100,0.141,236.8
+general,10,500,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,5,1.06,124750
+general,10,500,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,100,0.128,535.3
+general,10,500,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,100,0.196,2204.8
+general,10,500,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,5,0.5,453.7
+general,10,1500,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,1,8.4,1124250
+general,10,1500,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,5,0.44,2275.1
+general,10,1500,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,5,0.74,9812.2
+general,10,1500,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,5,1.68,1820.7
+general,10,5000,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,1,55.7,12497500
+general,10,5000,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,3,1.633333,7084
+general,10,5000,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,3,2.666667,49489.4
+general,10,5000,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,1,6.5,5355.2

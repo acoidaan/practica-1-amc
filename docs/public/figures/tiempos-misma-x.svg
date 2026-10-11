@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc" viewBox="0 0 920 540">
+  <title id="title">Estudio experimental · misma coordenada x</title>
+  <desc id="desc">Gráfica de líneas con los tiempos medios de las cuatro estrategias para el caso vertical.</desc>
+  <style>
+    .background { fill: #fff; stroke: #d2d2d7; }
+    .title { fill: #1d1d1f; font: 700 23px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .subtitle, .tick, .axis-title, .legend { fill: #6e6e73; font: 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .legend { fill: #1d1d1f; }
+    .grid { stroke: #e5e7eb; stroke-width: 1; }
+    .axis { stroke: #6e6e73; stroke-width: 1.2; }
+    .series { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+  <rect class="background" x="1" y="1" width="918" height="538" rx="20" />
+  <text class="title" x="42" y="49">Estudio experimental · misma coordenada x</text>
+  <text class="subtitle" x="42" y="73">Media de 10 repeticiones · menor tiempo es mejor</text>
+  <circle cx="505" cy="45" r="5" fill="#0071e3" />
+      <text class="legend" x="517" y="49">Exhaustivo</text><circle cx="700" cy="45" r="5" fill="#ff7a00" />
+      <text class="legend" x="712" y="49">ExhaustivoPoda</text><circle cx="505" cy="70" r="5" fill="#34a853" />
+      <text class="legend" x="517" y="74">DivideVenceras</text><circle cx="700" cy="70" r="5" fill="#7c3aed" />
+      <text class="legend" x="712" y="74">DyV Mejorado</text>
+  
+      <line class="grid" x1="82" x2="884" y1="450" y2="450" />
+      <text class="tick" x="68" y="454" text-anchor="end">0.00</text>
+      <line class="grid" x1="82" x2="884" y1="393.6666666666667" y2="393.6666666666667" />
+      <text class="tick" x="68" y="397.6666666666667" text-anchor="end">20</text>
+      <line class="grid" x1="82" x2="884" y1="337.33333333333337" y2="337.33333333333337" />
+      <text class="tick" x="68" y="341.33333333333337" text-anchor="end">40</text>
+      <line class="grid" x1="82" x2="884" y1="281" y2="281" />
+      <text class="tick" x="68" y="285" text-anchor="end">60</text>
+      <line class="grid" x1="82" x2="884" y1="224.66666666666669" y2="224.66666666666669" />
+      <text class="tick" x="68" y="228.66666666666669" text-anchor="end">80</text>
+      <line class="grid" x1="82" x2="884" y1="168.33333333333331" y2="168.33333333333331" />
+      <text class="tick" x="68" y="172.33333333333331" text-anchor="end">100</text>
+      <line class="grid" x1="82" x2="884" y1="112" y2="112" />
+      <text class="tick" x="68" y="116" text-anchor="end">120</text>
+  <line class="axis" x1="82" x2="82" y1="112" y2="450" />
+  <line class="axis" x1="82" x2="884" y1="450" y2="450" />
+  
+      <line class="axis" x1="82" x2="82" y1="450" y2="457" />
+      <text class="tick" x="82" y="478" text-anchor="middle">200</text>
+      <line class="axis" x1="132.125" x2="132.125" y1="450" y2="457" />
+      <text class="tick" x="132.125" y="478" text-anchor="middle">500</text>
+      <line class="axis" x1="299.2083333333333" x2="299.2083333333333" y1="450" y2="457" />
+      <text class="tick" x="299.2083333333333" y="478" text-anchor="middle">1500</text>
+      <line class="axis" x1="884" x2="884" y1="450" y2="457" />
+      <text class="tick" x="884" y="478" text-anchor="middle">5000</text>
+  <polyline class="series" stroke="#0071e3" points="82.00,449.70 132.13,447.52 299.21,422.68 884.00,296.49" />
+        <circle cx="82" cy="449.6958" r="5" fill="#0071e3">
+          <title>Exhaustivo · n=200 · 0.108 ms</title>
+        </circle>
+        <circle cx="132.125" cy="447.52133333333336" r="5" fill="#0071e3">
+          <title>Exhaustivo · n=500 · 0.88 ms</title>
+        </circle>
+        <circle cx="299.2083333333333" cy="422.67833333333334" r="5" fill="#0071e3">
+          <title>Exhaustivo · n=1500 · 9.7 ms</title>
+        </circle>
+        <circle cx="884" cy="296.4916666666667" r="5" fill="#0071e3">
+          <title>Exhaustivo · n=5000 · 54.5 ms</title>
+        </circle><polyline class="series" stroke="#ff7a00" points="82.00,449.51 132.13,447.29 299.21,417.89 884.00,245.79" />
+        <circle cx="82" cy="449.5099" r="5" fill="#ff7a00">
+          <title>ExhaustivoPoda · n=200 · 0.174 ms</title>
+        </circle>
+        <circle cx="132.125" cy="447.28755" r="5" fill="#ff7a00">
+          <title>ExhaustivoPoda · n=500 · 0.963 ms</title>
+        </circle>
+        <circle cx="299.2083333333333" cy="417.89" r="5" fill="#ff7a00">
+          <title>ExhaustivoPoda · n=1500 · 11.4 ms</title>
+        </circle>
+        <circle cx="884" cy="245.79166666666669" r="5" fill="#ff7a00">
+          <title>ExhaustivoPoda · n=5000 · 72.5 ms</title>
+        </circle><polyline class="series" stroke="#34a853" points="82.00,449.38 132.13,445.68 299.21,411.98 884.00,153.69" />
+        <circle cx="82" cy="449.38033333333334" r="5" fill="#34a853">
+          <title>DivideVenceras · n=200 · 0.22 ms</title>
+        </circle>
+        <circle cx="132.125" cy="445.68111205" r="5" fill="#34a853">
+          <title>DivideVenceras · n=500 · 1.533333 ms</title>
+        </circle>
+        <circle cx="299.2083333333333" cy="411.975" r="5" fill="#34a853">
+          <title>DivideVenceras · n=1500 · 13.5 ms</title>
+        </circle>
+        <circle cx="884" cy="153.68666666666667" r="5" fill="#34a853">
+          <title>DivideVenceras · n=5000 · 105.2 ms</title>
+        </circle><polyline class="series" stroke="#7c3aed" points="82.00,449.54 132.13,448.65 299.21,445.12 884.00,431.41" />
+        <circle cx="82" cy="449.53525" r="5" fill="#7c3aed">
+          <title>DyV Mejorado · n=200 · 0.165 ms</title>
+        </circle>
+        <circle cx="132.125" cy="448.648" r="5" fill="#7c3aed">
+          <title>DyV Mejorado · n=500 · 0.48 ms</title>
+        </circle>
+        <circle cx="299.2083333333333" cy="445.1177787166667" r="5" fill="#7c3aed">
+          <title>DyV Mejorado · n=1500 · 1.733333 ms</title>
+        </circle>
+        <circle cx="884" cy="431.41" r="5" fill="#7c3aed">
+          <title>DyV Mejorado · n=5000 · 6.6 ms</title>
+        </circle>
+  <text class="axis-title" x="483" y="510" text-anchor="middle">Talla n</text>
+  <text class="axis-title" x="22" y="281" text-anchor="middle" transform="rotate(-90 22 281)">Tiempo medio (ms)</text>
+</svg>

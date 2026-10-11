@@ -1,0 +1,17 @@
+distribucion,repeticiones,talla,estrategia_id,estrategia,metodo_medicion,ejecuciones_por_medicion,tiempo_medio_ms,distancias_medias
+misma_x,10,200,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,100,0.108,19900
+misma_x,10,200,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,100,0.174,19900
+misma_x,10,200,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,5,0.22,19900
+misma_x,10,200,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,100,0.165,194.3
+misma_x,10,500,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,5,0.88,124750
+misma_x,10,500,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,100,0.963,124750
+misma_x,10,500,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,3,1.533333,124750
+misma_x,10,500,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,5,0.48,317.6
+misma_x,10,1500,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,1,9.7,1124250
+misma_x,10,1500,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,1,11.4,1124250
+misma_x,10,1500,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,1,13.5,1124250
+misma_x,10,1500,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,3,1.733333,1532.5
+misma_x,10,5000,exhaustive,Exhaustivo,calentamiento_y_lote_adaptativo,1,54.5,12497500
+misma_x,10,5000,exhaustive-pruning,ExhaustivoPoda,calentamiento_y_lote_adaptativo,1,72.5,12497500
+misma_x,10,5000,divide-conquer,DivideVenceras,calentamiento_y_lote_adaptativo,1,105.2,12497500
+misma_x,10,5000,divide-conquer-improved,DyV Mejorado,calentamiento_y_lote_adaptativo,1,6.6,4187.4

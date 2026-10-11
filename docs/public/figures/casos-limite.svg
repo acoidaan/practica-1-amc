@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc" viewBox="0 0 920 420">
+  <title id="title">Ejemplos favorable y desfavorable para la poda horizontal</title>
+  <desc id="desc">A la izquierda hay puntos repartidos horizontalmente y una pareja cercana. A la derecha todos los puntos comparten coordenada x.</desc>
+  <style>
+    .panel { fill: #fff; stroke: #d2d2d7; }
+    .heading { fill: #1d1d1f; font: 700 20px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .copy { fill: #6e6e73; font: 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .point { fill: #0071e3; }
+    .closest { fill: #ff7a00; }
+    .segment { stroke: #ff7a00; stroke-width: 4; stroke-linecap: round; }
+    .guide { stroke: #a1a1a6; stroke-width: 2; stroke-dasharray: 7 7; }
+  </style>
+  <rect class="panel" x="1" y="1" width="918" height="418" rx="20" />
+  <text class="heading" x="45" y="48">Caso favorable</text>
+  <text class="copy" x="45" y="73">Una distancia pequeña permite cortar pronto por Δx.</text>
+  <text class="heading" x="500" y="48">Caso desfavorable: misma x</text>
+  <text class="copy" x="500" y="73">Δx = 0 y la poda horizontal no descarta parejas.</text>
+  <line class="guide" x1="460" x2="460" y1="32" y2="386" />
+  <circle class="point" cx="72" cy="270" r="7" /><circle class="point" cx="132" cy="155" r="7" />
+  <circle class="point" cx="205" cy="304" r="7" /><circle class="point" cx="288" cy="130" r="7" />
+  <circle class="point" cx="387" cy="245" r="7" /><circle class="point" cx="418" cy="112" r="7" />
+  <line class="segment" x1="205" y1="304" x2="220" y2="290" />
+  <circle class="closest" cx="205" cy="304" r="8" /><circle class="closest" cx="220" cy="290" r="8" />
+  <line class="guide" x1="700" x2="700" y1="95" y2="365" />
+  <circle class="point" cx="700" cy="115" r="7" /><circle class="point" cx="700" cy="165" r="7" />
+  <circle class="point" cx="700" cy="220" r="7" /><circle class="point" cx="700" cy="285" r="7" />
+  <line class="segment" x1="700" y1="325" x2="700" y2="342" />
+  <circle class="closest" cx="700" cy="325" r="8" /><circle class="closest" cx="700" cy="342" r="8" />
+  <text class="copy" x="45" y="382">La separación horizontal crece al avanzar en el orden por x.</text>
+  <text class="copy" x="500" y="382">Las tres estrategias no mejoradas calculan todos los pares.</text>
+</svg>
