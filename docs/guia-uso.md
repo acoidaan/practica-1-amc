@@ -32,6 +32,28 @@ Con un dataset activo, **Comprobar las cuatro estrategias** ejecuta cada algorit
 
 La visualización resalta los dos puntos más cercanos y el segmento que los une.
 
+## Utilizar el laboratorio de algoritmos
+
+Con un dataset de entre $2$ y $120$ puntos, el bloque **Laboratorio de algoritmos** permite:
+
+- elegir cualquiera de las cuatro estrategias;
+- reproducir, pausar, reiniciar o avanzar paso a paso;
+- comparar dos estrategias de manera sincronizada;
+- ajustar la velocidad de la animación;
+- mostrar los identificadores de los puntos;
+- acercar, alejar y desplazar el plano;
+- ver en naranja la pareja cuya distancia se calcula;
+- ver con trazo discontinuo una poda que evita calcular distancias;
+- conservar en verde la mejor pareja conocida;
+- observar la división, la franja de anchura $2\delta$ y el nivel recursivo;
+- seguir el fragmento TypeScript cuya línea activa se resalta automáticamente.
+
+La aplicación ejecuta el algoritmo real con un observador opcional y después reproduce los eventos registrados. El plano, la explicación y el código avanzan desde la misma traza. Esta reproducción está separada de la medición experimental para que el renderizado y las pausas no alteren los tiempos.
+
+El flujo de la página es lineal: dataset, laboratorio, comprobación y experimentos. Los botones que producen resultados están situados junto a sus salidas y la lista completa de puntos permanece plegada hasta que se necesita.
+
+El límite de $120$ puntos evita almacenar millones de eventos en estrategias cuadráticas. No afecta a la comprobación normal ni al estudio experimental.
+
 ## Ejecutar el estudio experimental
 
 El estudio utiliza las tallas mínimas requeridas: $200$, $500$, $1500$ y $5000$. Se puede comparar:

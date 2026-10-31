@@ -23,13 +23,17 @@ Esta guía no sustituye la comprensión de la práctica. Su objetivo es ordenar 
 ## Demostración recomendada
 
 1. Cargar un dataset pequeño y mostrar sus puntos.
-2. Ejecutar las cuatro estrategias y señalar la igualdad de distancias.
-3. Explicar por qué los contadores son diferentes.
-4. Descargar uno de los resultados TSPLIB.
-5. Ejecutar el estudio general y mostrar tabla, gráfica y CSV.
-6. Repetir con **Misma coordenada x**.
-7. Comparar el cambio de ganador.
-8. Abrir la memoria y la referencia TypeDoc desde el burger.
+2. Abrir el **Laboratorio** desde la navegación superior y reproducir una estrategia paso a paso.
+3. Señalar la comparación naranja, la poda discontinua, la mejor pareja verde y la línea de código activa.
+4. Activar la comparación lado a lado y contrastar una estrategia cuadrática con DyV mejorado.
+5. En DyV, mostrar la división, la franja $2\delta$ y el nivel recursivo.
+6. Ejecutar las cuatro estrategias y señalar la igualdad de distancias.
+7. Explicar por qué los contadores son diferentes.
+8. Descargar uno de los resultados TSPLIB.
+9. Ejecutar el estudio general y mostrar tabla, gráfica y CSV.
+10. Repetir con **Misma coordenada x**.
+11. Comparar el cambio de ganador.
+12. Abrir la memoria y la referencia TypeDoc, y volver a la aplicación desde la navegación.
 
 No conviene iniciar la defensa directamente con $n=5000$. Primero debe verse el flujo completo con una entrada pequeña.
 
@@ -81,6 +85,14 @@ El contador solo mide llamadas a la distancia euclídea. No contabiliza ordenaci
 
 Entra la estrategia completa, incluida su ordenación. Quedan fuera generación, copia, mensajes, serialización, descarga y renderizado.
 
+### ¿La animación modifica los algoritmos o falsea sus tiempos?
+
+No. Las estrategias aceptan un `SearchObserver` opcional que solo se proporciona al crear una traza visual. `algorithm-trace.ts` registra comparaciones, mejoras y podas, y Angular reproduce esos eventos después. `measureStrategy` llama a las mismas estrategias sin observador, por lo que la creación de eventos, los temporizadores y el SVG quedan fuera del benchmark.
+
+### ¿Por qué la animación limita el dataset a 120 puntos?
+
+El exhaustivo puede generar $n(n-1)/2$ comparaciones. El límite protege la memoria y mantiene la demostración manejable; no limita la comprobación normal ni el estudio experimental.
+
 ### ¿Por qué cada estrategia necesita una copia distinta?
 
 Las estrategias que ordenan modifican el array. Compartir una única copia haría que las siguientes partiesen de un orden alterado y dejaría de ser una comparación equivalente.
@@ -98,6 +110,10 @@ Puede haber varias parejas empatadas con la misma distancia mínima. Todas son s
 | [`heap-sort.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/heap-sort.ts)                                   | Ordenación propia por comparador      |
 | [Archivos de búsqueda](https://github.com/acoidaan/practica-1-amc/tree/main/src/app/core)                                          | Cuatro algoritmos                     |
 | [`strategy-runner.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/strategy-runner.ts)                       | Copias, reloj y contrato común        |
+| [`search-observer.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/search-observer.ts)                       | Eventos opcionales de los algoritmos  |
+| [`algorithm-trace.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/algorithm-trace.ts)                       | Traza reproducible para la animación  |
+| [`algorithm-code.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/algorithm-code.ts)                         | Código sincronizado por fase          |
+| [`point-plot.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/point-plot.ts)                                 | Proyección, divisores y franjas SVG   |
 | [`strategy-checker.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/strategy-checker.ts)                     | Comprobación conjunta y exportaciones |
 | [`experiment-runner.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/experiment-runner.ts)                   | Repeticiones, medias y coherencia     |
 | [`adaptive-strategy-measurer.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/adaptive-strategy-measurer.ts) | Calentamiento, calibración y lotes    |
@@ -121,6 +137,9 @@ Puede haber varias parejas empatadas con la misma distancia mínima. Todas son s
 - [ ] La aplicación abre sin errores.
 - [ ] El dataset de demostración está preparado.
 - [ ] Las cuatro estrategias coinciden.
+- [ ] Puedes explicar por qué la traza visual no forma parte del tiempo medido.
+- [ ] Puedes relacionar una línea resaltada con el evento emitido por el algoritmo.
+- [ ] Puedes explicar la división, la franja y el nivel recursivo mostrado.
 - [ ] El estudio general termina y muestra cuatro líneas.
 - [ ] El caso vertical muestra la degradación esperada.
 - [ ] Los enlaces de documentación y API funcionan.

@@ -7,12 +7,20 @@ export const PLOT_HEIGHT = 500;
 /** Minimum internal margin around projected coordinates. */
 export const PLOT_PADDING = 32;
 
-/** Source point enriched with SVG coordinates and solution membership. */
+/** Pair-like connection rendered as a segment without requiring a known distance. */
+export interface PointConnection {
+  readonly first: Point;
+  readonly second: Point;
+}
+
+/** Source point enriched with SVG coordinates and visualization membership. */
 export interface PlotPoint {
   readonly point: Point;
   readonly plotX: number;
   readonly plotY: number;
   readonly isClosest: boolean;
+  readonly isActive: boolean;
+  readonly isInActiveRange: boolean;
 }
 
 /** SVG endpoints of the segment joining the closest pair. */
@@ -23,12 +31,28 @@ export interface PlotSegment {
   readonly y2: number;
 }
 
+/** Optional recursive and strip overlays rendered by the algorithm laboratory. */
+export interface PointPlotOverlay {
+  readonly activePoints?: readonly Point[];
+  readonly dividerX?: number;
+  readonly delta?: number;
+}
+
+/** Projected vertical strip around a divide-and-conquer separator. */
+export interface PlotStrip {
+  readonly x: number;
+  readonly width: number;
+}
+
 /** Complete view model consumed by the dataset SVG. */
 export interface PointPlot {
   readonly width: number;
   readonly height: number;
   readonly points: readonly PlotPoint[];
   readonly segment: PlotSegment | undefined;
+  readonly activeSegment: PlotSegment | undefined;
+  readonly dividerPlotX: number | undefined;
+  readonly strip: PlotStrip | undefined;
 }
 
 interface PlotBounds {
@@ -115,52 +139,85 @@ function projectPoint(point: Point, bounds: PlotBounds, transform: PlotTransform
  *
  * @param points - Dataset coordinates to project.
  * @param closestPair - Optional solution whose endpoints and segment are highlighted.
+ * @param activeConnection - Optional pair currently compared or pruned.
+ * @param overlay - Optional recursive range, divider and strip information.
  * @returns A pure SVG view model without touching the DOM.
  */
-export function createPointPlot(points: readonly Point[], closestPair?: ClosestPair): PointPlot {
+export function createPointPlot(
+  points: readonly Point[],
+  closestPair?: ClosestPair,
+  activeConnection?: PointConnection,
+  overlay: PointPlotOverlay = {},
+): PointPlot {
   if (points.length === 0) {
     return {
       width: PLOT_WIDTH,
       height: PLOT_HEIGHT,
       points: [],
       segment: undefined,
+      activeSegment: undefined,
+      dividerPlotX: undefined,
+      strip: undefined,
     };
   }
 
   const bounds = findBounds(points);
   const transform = createTransform(bounds);
+  const activeRange = new Set(overlay.activePoints ?? []);
 
   const plotPoints = points.map((point): PlotPoint => {
     const position = projectPoint(point, bounds, transform);
     const isClosest =
       closestPair !== undefined && (point === closestPair.first || point === closestPair.second);
+    const isActive =
+      activeConnection !== undefined &&
+      (point === activeConnection.first || point === activeConnection.second);
 
     return {
       point,
       plotX: position.plotX,
       plotY: position.plotY,
       isClosest,
+      isActive,
+      isInActiveRange: activeRange.has(point),
     };
   });
 
-  let segment: PlotSegment | undefined = undefined;
+  const projectConnection = (connection: PointConnection | undefined): PlotSegment | undefined => {
+    if (connection === undefined) return undefined;
 
-  if (closestPair !== undefined) {
-    const firstPosition = projectPoint(closestPair.first, bounds, transform);
-    const secondPosition = projectPoint(closestPair.second, bounds, transform);
+    const firstPosition = projectPoint(connection.first, bounds, transform);
+    const secondPosition = projectPoint(connection.second, bounds, transform);
 
-    segment = {
+    return {
       x1: firstPosition.plotX,
       y1: firstPosition.plotY,
       x2: secondPosition.plotX,
       y2: secondPosition.plotY,
     };
+  };
+
+  const dividerPlotX =
+    overlay.dividerX === undefined
+      ? undefined
+      : transform.offsetX + (overlay.dividerX - bounds.minX) * transform.scale;
+
+  let strip: PlotStrip | undefined = undefined;
+
+  if (dividerPlotX !== undefined && overlay.delta !== undefined) {
+    const halfWidth = overlay.delta * transform.scale;
+    const left = Math.max(0, dividerPlotX - halfWidth);
+    const right = Math.min(PLOT_WIDTH, dividerPlotX + halfWidth);
+    strip = { x: left, width: Math.max(0, right - left) };
   }
 
   return {
     width: PLOT_WIDTH,
     height: PLOT_HEIGHT,
     points: plotPoints,
-    segment,
+    segment: projectConnection(closestPair),
+    activeSegment: projectConnection(activeConnection),
+    dividerPlotX,
+    strip,
   };
 }

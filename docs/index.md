@@ -10,6 +10,10 @@ hero:
   tagline: Cuatro estrategias, una implementación verificable y un estudio que conecta complejidad teórica con comportamiento real.
   actions:
     - theme: brand
+      text: Abrir la aplicación
+      link: https://practica-1-amc.vercel.app/
+      target: _self
+    - theme: alt
       text: Leer la memoria
       link: /memoria
     - theme: alt

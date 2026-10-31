@@ -9,6 +9,9 @@ describe('createPointPlot', () => {
       height: PLOT_HEIGHT,
       points: [],
       segment: undefined,
+      activeSegment: undefined,
+      dividerPlotX: undefined,
+      strip: undefined,
     });
   });
 
@@ -107,6 +110,46 @@ describe('createPointPlot', () => {
       x2: plottedSecond?.plotX,
       y2: plottedSecond?.plotY,
     });
+  });
+
+  it('projects an active comparison independently from the best pair', () => {
+    const first: Point = { id: 1, x: 0, y: 0 };
+    const second: Point = { id: 2, x: 4, y: 0 };
+    const activeFirst: Point = { id: 3, x: 0, y: 3 };
+    const activeSecond: Point = { id: 4, x: 4, y: 3 };
+    const closestPair: ClosestPair = { first, second, distance: 4 };
+
+    const plot = createPointPlot([first, second, activeFirst, activeSecond], closestPair, {
+      first: activeFirst,
+      second: activeSecond,
+    });
+
+    expect(plot.points.filter((point) => point.isClosest).map((point) => point.point.id)).toEqual([
+      1, 2,
+    ]);
+    expect(plot.points.filter((point) => point.isActive).map((point) => point.point.id)).toEqual([
+      3, 4,
+    ]);
+    expect(plot.segment).toBeDefined();
+    expect(plot.activeSegment).toBeDefined();
+  });
+
+  it('projects the divide-and-conquer divider, strip and active range', () => {
+    const points: readonly Point[] = [
+      { id: 1, x: 0, y: 0 },
+      { id: 2, x: 5, y: 3 },
+      { id: 3, x: 10, y: 1 },
+    ];
+
+    const plot = createPointPlot(points, undefined, undefined, {
+      activePoints: [points[1], points[2]],
+      dividerX: 5,
+      delta: 2,
+    });
+
+    expect(plot.dividerPlotX).toBe(plot.points[1].plotX);
+    expect(plot.strip?.width).toBeGreaterThan(0);
+    expect(plot.points.map((point) => point.isInActiveRange)).toEqual([false, true, true]);
   });
 
   it('does not mutate the input points or their order', () => {

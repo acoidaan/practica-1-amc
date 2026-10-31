@@ -1,6 +1,7 @@
 import type { ClosestPair, DistanceCounter, Point } from './models';
 import { heapSortByX, heapSortByY } from './heap-sort';
 import { distanceBetween } from './distance';
+import type { SearchObserver } from './search-observer';
 
 function closestPairInRange(
   pointsByX: readonly Point[],
@@ -9,10 +10,18 @@ function closestPairInRange(
   end: number,
   xIndexByPoint: ReadonlyMap<Point, number>,
   counter: DistanceCounter,
+  observer?: SearchObserver,
+  depth = 0,
 ): ClosestPair | undefined {
   const size = end - start;
 
   if (size <= 3) {
+    observer?.phase(
+      'base-case',
+      { activePoints: pointsByX.slice(start, end), depth },
+      counter.calculations,
+    );
+
     let best: ClosestPair | undefined = undefined;
 
     for (let i = start; i < end - 1; i++) {
@@ -23,9 +32,11 @@ function closestPairInRange(
           second: pointsByX[j],
           distance,
         };
+        observer?.compare(pointsByX[i], pointsByX[j], distance, counter.calculations);
 
         if (best === undefined || candidate.distance < best.distance) {
           best = candidate;
+          observer?.accept(candidate, counter.calculations);
         }
       }
     }
@@ -34,6 +45,14 @@ function closestPairInRange(
   }
 
   const middle = start + Math.floor(size / 2);
+  const dividerX = pointsByX[middle].x;
+
+  observer?.phase(
+    'divide',
+    { activePoints: pointsByX.slice(start, end), dividerX, depth },
+    counter.calculations,
+  );
+
   const leftPointsByY: Point[] = [];
   const rightPointsByY: Point[] = [];
 
@@ -58,6 +77,8 @@ function closestPairInRange(
     middle,
     xIndexByPoint,
     counter,
+    observer,
+    depth + 1,
   );
 
   const rightBest = closestPairInRange(
@@ -67,6 +88,8 @@ function closestPairInRange(
     end,
     xIndexByPoint,
     counter,
+    observer,
+    depth + 1,
   );
 
   if (leftBest === undefined) {
@@ -83,8 +106,14 @@ function closestPairInRange(
     best = rightBest;
   }
 
-  const dividerX = pointsByX[middle].x;
   const delta = best.distance;
+
+  observer?.phase(
+    'combine',
+    { activePoints: pointsByX.slice(start, end), dividerX, delta, depth },
+    counter.calculations,
+  );
+
   const strip: Point[] = [];
 
   for (const point of pointsByY) {
@@ -92,6 +121,12 @@ function closestPairInRange(
       strip.push(point);
     }
   }
+
+  observer?.phase(
+    'build-strip',
+    { activePoints: strip, dividerX, delta, depth },
+    counter.calculations,
+  );
 
   for (let i = 0; i < strip.length - 1; i++) {
     const lastSuccessor = Math.min(i + 11, strip.length - 1);
@@ -108,6 +143,7 @@ function closestPairInRange(
       const deltaY = strip[j].y - strip[i].y;
 
       if (deltaY >= best.distance) {
+        observer?.prune(strip[i], strip[j], 'vertical', counter.calculations);
         break;
       }
 
@@ -129,9 +165,11 @@ function closestPairInRange(
         second: strip[j],
         distance,
       };
+      observer?.compare(strip[i], strip[j], distance, counter.calculations);
 
       if (candidate.distance < best.distance) {
         best = candidate;
+        observer?.accept(candidate, counter.calculations);
       }
     }
   }
@@ -149,12 +187,15 @@ function closestPairInRange(
  *
  * @param points - Mutable working copy of the dataset.
  * @param counter - Distance instrumentation for this execution.
+ * @param observer - Optional hooks used only when generating a visual trace.
  * @returns The closest pair, or `undefined` when fewer than two points exist.
  */
 export function divideAndConquerImprovedSearch(
   points: Point[],
   counter: DistanceCounter,
+  observer?: SearchObserver,
 ): ClosestPair | undefined {
+  observer?.phase('sort-x', { activePoints: points, depth: 0 }, counter.calculations);
   heapSortByX(points);
 
   const xIndexByPoint = new Map<Point, number>();
@@ -164,7 +205,9 @@ export function divideAndConquerImprovedSearch(
   }
 
   const pointsByY = [...points];
+  observer?.phase('sort-y', { activePoints: pointsByY, depth: 0 }, counter.calculations);
   heapSortByY(pointsByY);
+  observer?.phase('initialize', { activePoints: points, depth: 0 }, counter.calculations);
 
-  return closestPairInRange(points, pointsByY, 0, points.length, xIndexByPoint, counter);
+  return closestPairInRange(points, pointsByY, 0, points.length, xIndexByPoint, counter, observer);
 }

@@ -20,7 +20,7 @@ Puedes <a href="/documentacion/downloads/memoria-practica-1-amc.pdf" download>de
 
 Esta práctica estudia el problema geométrico del par de puntos más cercano: dado un conjunto de $n$ puntos del plano, encontrar los dos cuya distancia euclídea sea mínima. Se implementan y comparan cuatro estrategias: búsqueda exhaustiva, búsqueda exhaustiva con poda, divide y vencerás básico y divide y vencerás mejorado.
 
-La aplicación permite cargar o generar datasets, representar gráficamente la solución, comprobar que las cuatro estrategias obtienen la misma distancia y ejecutar un estudio experimental reproducible. Las mediciones se realizan fuera del hilo principal mediante un Web Worker y excluyen la generación de datos, la representación gráfica y la preparación de copias.
+La aplicación permite cargar o generar datasets, utilizar un laboratorio visual con código sincronizado y comparación lado a lado, comprobar que las cuatro estrategias obtienen la misma distancia y ejecutar un estudio experimental reproducible. Las mediciones se realizan fuera del hilo principal mediante un Web Worker y excluyen la generación de datos, la representación gráfica, la traza visual y la preparación de copias.
 
 Los resultados muestran que no existe una estrategia ganadora para todas las distribuciones. En el caso general estudiado, la búsqueda exhaustiva con poda obtiene el menor tiempo gracias a su sencillez y a una poda muy efectiva. Cuando todos los puntos comparten coordenada $x$, las tres estrategias no mejoradas calculan todos los pares y divide y vencerás mejorado conserva un crecimiento claramente inferior.
 
@@ -28,17 +28,18 @@ Los resultados muestran que no existe una estrategia ganadora para todas las dis
 
 La tabla relaciona los requisitos principales del enunciado con su implementación y evidencia.
 
-| Requisito                                     | Implementación                                                                                                                                                                                                              | Evidencia                                                 |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| Cargar datasets TSPLIB                        | [`tsplib-parser.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/tsplib-parser.ts) e interfaz de archivos                                                                                             | Pruebas válidas e inválidas del parser y del componente   |
-| Generar datasets general y vertical           | [`dataset-generator.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/dataset-generator.ts) y [`tsplib-writer.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/tsplib-writer.ts) | Descarga TSPLIB y pruebas de formato                      |
-| Implementar HeapSort                          | [`heap-sort.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/heap-sort.ts)                                                                                                                            | Orden por $x$ e $y$, sin `Array.sort()` en producción     |
-| Ejecutar cuatro estrategias                   | [Módulos de búsqueda](https://github.com/acoidaan/practica-1-amc/tree/main/src/app/core) y [`strategy-runner.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/strategy-runner.ts)                     | Igualdad de distancias y contadores independientes        |
-| Mostrar solución textual y gráfica            | Tablas y [`point-plot.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/point-plot.ts)                                                                                                                 | Pareja mínima, distancia, puntos y segmento resaltado     |
-| Comparar tallas $200$, $500$, $1500$ y $5000$ | [`experiment-runner.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/experiment-runner.ts)                                                                                                            | Diez repeticiones por talla y progreso de 40 experimentos |
-| Mantener la interfaz activa                   | [`experiment.worker.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/browser/experiment.worker.ts)                                                                                                         | Cálculo en Worker con cancelación y control de errores    |
-| Presentar tabla y gráfica conjunta            | [`experiment-chart.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/experiment-chart.ts) y [CSV](https://github.com/acoidaan/practica-1-amc/tree/main/results)                                        | Cuatro líneas, tablas y ficheros de evidencia             |
-| Entregar documentación razonada               | VitePress, esta memoria y TypeDoc                                                                                                                                                                                           | Portal web imprimible a PDF y referencia técnica          |
+| Requisito                                     | Implementación                                                                                                                                                                                                                                                                                                                          | Evidencia                                                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Cargar datasets TSPLIB                        | [`tsplib-parser.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/tsplib-parser.ts) e interfaz de archivos                                                                                                                                                                                                         | Pruebas válidas e inválidas del parser y del componente     |
+| Generar datasets general y vertical           | [`dataset-generator.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/dataset-generator.ts) y [`tsplib-writer.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/tsplib-writer.ts)                                                                                                             | Descarga TSPLIB y pruebas de formato                        |
+| Implementar HeapSort                          | [`heap-sort.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/heap-sort.ts)                                                                                                                                                                                                                                        | Orden por $x$ e $y$, sin `Array.sort()` en producción       |
+| Ejecutar cuatro estrategias                   | [Módulos de búsqueda](https://github.com/acoidaan/practica-1-amc/tree/main/src/app/core) y [`strategy-runner.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/strategy-runner.ts)                                                                                                                                 | Igualdad de distancias y contadores independientes          |
+| Mostrar solución textual y gráfica            | Tablas y [`point-plot.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/point-plot.ts)                                                                                                                                                                                                                             | Pareja mínima, distancia, puntos y segmento resaltado       |
+| Reproducir y comparar los algoritmos          | [`search-observer.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/search-observer.ts), [`algorithm-trace.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/algorithm-trace.ts) y [`algorithm-code.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/algorithm-code.ts) | Plano, recursión y código sincronizados sin alterar tiempos |
+| Comparar tallas $200$, $500$, $1500$ y $5000$ | [`experiment-runner.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/experiment-runner.ts)                                                                                                                                                                                                                        | Diez repeticiones por talla y progreso de 40 experimentos   |
+| Mantener la interfaz activa                   | [`experiment.worker.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/browser/experiment.worker.ts)                                                                                                                                                                                                                     | Cálculo en Worker con cancelación y control de errores      |
+| Presentar tabla y gráfica conjunta            | [`experiment-chart.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/experiment-chart.ts) y [CSV](https://github.com/acoidaan/practica-1-amc/tree/main/results)                                                                                                                                                    | Cuatro líneas, tablas y ficheros de evidencia               |
+| Entregar documentación razonada               | VitePress, esta memoria y TypeDoc                                                                                                                                                                                                                                                                                                       | Portal web imprimible a PDF y referencia técnica            |
 
 ## Definición formal del problema
 
@@ -455,7 +456,9 @@ La aplicación separa el núcleo puro de los detalles del navegador:
 
 ```text
 Interfaz Angular
-├── carga, formularios, tablas y SVG
+├── flujo lineal: dataset, laboratorio, comprobación y experimentos
+├── dos reproductores de trazas sincronizados
+├── plano SVG, código activo y controles de viewport
 ├── navegación y exportaciones
 └── protocolo de mensajes
     └── Web Worker
@@ -474,6 +477,9 @@ Los módulos principales son:
 - [`core/`](https://github.com/acoidaan/practica-1-amc/tree/main/src/app/core): algoritmos, modelos, parser, serialización, medición y transformaciones puras;
 - [`browser/`](https://github.com/acoidaan/practica-1-amc/tree/main/src/app/browser): descargas y Web Worker;
 - [`app.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/app.ts) y [`app.html`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/app.html): estado y presentación Angular;
+- [`search-observer.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/search-observer.ts) y [`algorithm-trace.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/algorithm-trace.ts): observación opcional y reproducción visual separada del benchmark;
+- [`algorithm-code.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/algorithm-code.ts): fragmentos TypeScript relacionados con cada fase de la traza;
+- [`point-plot.ts`](https://github.com/acoidaan/practica-1-amc/blob/main/src/app/core/point-plot.ts): proyección proporcional, conexiones, divisores y franjas;
 - [`results/`](https://github.com/acoidaan/practica-1-amc/tree/main/results): CSV conservados como evidencia;
 - [`docs/`](https://github.com/acoidaan/practica-1-amc/tree/main/docs): memoria VitePress y referencia TypeDoc.
 
@@ -487,6 +493,14 @@ Una función `async` no crea otro hilo. El estudio completo se ejecuta en un Web
 - `error`.
 
 El Worker termina al completar, fallar, cancelarse, superar el tiempo de inactividad o destruirse el componente.
+
+### Traza visual sin contaminar la medición
+
+Las cuatro estrategias aceptan un observador opcional. Cuando se prepara una animación, el observador registra ordenaciones, recorridos, divisiones, casos base, combinaciones, franjas, distancias calculadas, nuevas mejores parejas y podas sin cálculo euclídeo. La interfaz reproduce después esa secuencia con controles de pausa, paso y velocidad.
+
+Cada fase está relacionada con una o varias líneas de un fragmento TypeScript. El mismo evento actualiza simultáneamente el código resaltado, el plano, el divisor, la franja, el nivel recursivo y los contadores. El modo comparativo mantiene dos reproductores independientes y hace avanzar un paso de cada traza por pulso; si uno termina antes, permanece en su resultado final mientras el otro continúa.
+
+La ejecución experimental no proporciona observador. Por tanto, el registro de eventos, los temporizadores y el renderizado SVG no forman parte del intervalo medido. El visualizador se limita a $120$ puntos para evitar almacenar millones de pasos en estrategias cuadráticas; este límite no afecta a las funciones obligatorias de comprobación y experimentación.
 
 ## Metodología experimental
 
@@ -607,7 +621,7 @@ La conclusión no es que una estrategia sea siempre superior, sino que cada una 
 
 ## Pruebas y verificación
 
-La suite automatizada contiene **20 archivos y 103 pruebas**. Cubre, entre otros aspectos:
+La suite automatizada contiene **22 archivos y 113 pruebas**. Cubre, entre otros aspectos:
 
 - distancia e incremento exacto del contador;
 - comparadores y HeapSort por $x$ e $y$;
@@ -622,6 +636,10 @@ La suite automatizada contiene **20 archivos y 103 pruebas**. Cubre, entre otros
 - protocolo y cancelación del Worker;
 - cálculo de medias, gráfica y CSV;
 - navegación accesible y modo oscuro;
+- trazas de las cuatro estrategias, fases recursivas, podas y monotonía de la mejor distancia visual;
+- correspondencia entre cada fase emitida y una línea del panel de código;
+- reproducción simple y lado a lado, etiquetas, zoom y segmentos activos en el SVG;
+- proyección de divisores, franjas y subconjuntos recursivos;
 - control de inactividad del estudio experimental.
 
 La entrega se comprueba con:

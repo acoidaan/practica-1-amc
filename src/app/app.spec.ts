@@ -93,6 +93,29 @@ describe('App', () => {
     expect((fixture.nativeElement as HTMLElement).classList.contains('dark-theme')).toBe(true);
   });
 
+  it('should use the system theme when there is no stored preference', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn().mockReturnValue({
+        matches: true,
+        media: '(prefers-color-scheme: dark)',
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      } satisfies MediaQueryList),
+    );
+
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.isDarkTheme).toBe(true);
+    expect((fixture.nativeElement as HTMLElement).classList.contains('dark-theme')).toBe(true);
+    expect(localStorage.getItem('amc-theme')).toBeNull();
+  });
+
   it('should expose an accessible navigation menu by pointer, click and keyboard', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
@@ -108,7 +131,7 @@ describe('App', () => {
     await fixture.whenStable();
 
     expect(menuButton?.getAttribute('aria-expanded')).toBe('true');
-    expect(compiled.querySelectorAll('#navigation-panel a')).toHaveLength(5);
+    expect(compiled.querySelectorAll('#navigation-panel a')).toHaveLength(7);
     expect(compiled.querySelector<HTMLAnchorElement>('a[href="/documentacion/"]')).not.toBeNull();
 
     menuShell?.dispatchEvent(new MouseEvent('mouseleave'));
@@ -135,6 +158,9 @@ describe('App', () => {
     expect(compiled.querySelector('h1')?.textContent).toContain(
       'Práctica 1 - Par de puntos más cercano',
     );
+    expect(compiled.querySelectorAll('.journey-step')).toHaveLength(4);
+    expect(compiled.querySelector('.journey-step-active strong')?.textContent).toBe('Dataset');
+    expect(compiled.querySelectorAll('.journey-step-complete')).toHaveLength(0);
     expect(compiled.querySelector('input[type="file"]')).not.toBeNull();
     expect(compiled.querySelector('input[type="number"]')).not.toBeNull();
     expect(compiled.querySelector('input[type="checkbox"]')).not.toBeNull();
@@ -152,6 +178,60 @@ describe('App', () => {
     expect(compiled.querySelector('#check-strategies')).toBeNull();
     expect(compiled.querySelector('.point-plot')).toBeNull();
     expect(compiled.querySelector('.strategy-table')).toBeNull();
+  });
+
+  it('should update the journey and highlight the visible navigation section', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const app = fixture.componentInstance;
+    const sourceText = `DIMENSION: 3
+NODE_COORD_SECTION
+1 0 0
+2 1 1
+3 4 4
+EOF`;
+
+    await app.onFileSelected(fileSelectionEvent(sourceText));
+    app.stepVisualization();
+    app.runStrategyCheck();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const journeySteps = Array.from(compiled.querySelectorAll<HTMLElement>('.journey-step'));
+
+    expect(journeySteps[0]?.classList.contains('journey-step-complete')).toBe(true);
+    expect(journeySteps[1]?.classList.contains('journey-step-complete')).toBe(true);
+    expect(journeySteps[2]?.classList.contains('journey-step-complete')).toBe(true);
+    expect(journeySteps[3]?.classList.contains('journey-step-complete')).toBe(false);
+
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(500);
+    const sectionTops: Partial<Record<string, number>> = {
+      inicio: -900,
+      'preparar-dataset': -700,
+      dataset: -400,
+      visualizador: 40,
+      comprobacion: 500,
+      experimento: 900,
+    };
+
+    for (const [sectionId, top] of Object.entries(sectionTops)) {
+      const section = document.getElementById(sectionId);
+      if (section === null) throw new Error(`Missing section ${sectionId}`);
+
+      vi.spyOn(section, 'getBoundingClientRect').mockReturnValue({
+        top,
+      } as DOMRect);
+    }
+
+    window.dispatchEvent(new Event('scroll'));
+    await fixture.whenStable();
+
+    expect(app.activeSectionId).toBe('visualizador');
+    expect(
+      compiled.querySelector('.quick-nav a[href="#visualizador"]')?.getAttribute('aria-current'),
+    ).toBe('location');
+    expect(journeySteps[1]?.getAttribute('aria-current')).toBe('step');
   });
 
   it('should generate, load and download a same-x dataset', async () => {
@@ -184,7 +264,7 @@ describe('App', () => {
     expect(compiled.textContent).toContain('Archivo: dataset5.tsp');
     expect(compiled.textContent).toContain('Número de puntos: 5');
     expect(compiled.querySelector('#check-strategies')).not.toBeNull();
-    expect(compiled.querySelectorAll('.plot-point')).toHaveLength(5);
+    expect(compiled.querySelectorAll('.visualization-plot .plot-point')).toHaveLength(5);
     expect(compiled.querySelector('.closest-segment')).toBeNull();
   });
 
@@ -238,9 +318,25 @@ EOF`;
     expect(compiled.textContent).toContain('Archivo: example.tsp');
     expect(compiled.textContent).toContain('Número de puntos: 2');
     expect(compiled.querySelectorAll('.point-list li').length).toBe(2);
-    expect(compiled.querySelector('#check-strategies')).not.toBeNull();
-    expect(compiled.querySelectorAll('.plot-point')).toHaveLength(2);
-    expect(compiled.querySelector('.closest-segment')).toBeNull();
+    const datasetSection = compiled.querySelector('#dataset');
+    const laboratorySection = compiled.querySelector('#visualizador');
+    const checkSection = compiled.querySelector('#comprobacion');
+    const experimentSection = compiled.querySelector('#experimento');
+
+    expect(compiled.querySelector('#check-strategies')?.closest('section')?.id).toBe(
+      'comprobacion',
+    );
+    expect(datasetSection?.compareDocumentPosition(laboratorySection as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(laboratorySection?.compareDocumentPosition(checkSection as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(checkSection?.compareDocumentPosition(experimentSection as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(compiled.querySelectorAll('.visualization-plot .plot-point')).toHaveLength(2);
+    expect(compiled.querySelector('.visual-best-segment')).toBeNull();
   });
 
   it('should check four strategies, format their results and download each output', async () => {
@@ -275,8 +371,8 @@ EOF`;
     expect(app.strategyCheck?.executions).toHaveLength(4);
     expect(app.strategyCheck?.distancesMatch).toBe(true);
     expect(compiled.querySelectorAll('.strategy-row')).toHaveLength(4);
-    expect(compiled.querySelector('.closest-segment')).not.toBeNull();
-    expect(compiled.querySelectorAll('.closest-point')).toHaveLength(2);
+    expect(compiled.querySelector('.visual-best-segment')).not.toBeNull();
+    expect(compiled.querySelectorAll('.visual-best-point')).toHaveLength(2);
     expect(compiled.textContent).toContain(
       'Las cuatro estrategias coinciden en la distancia mínima.',
     );
@@ -315,6 +411,107 @@ EOF`;
     expect(revokeObjectUrlSpy).toHaveBeenCalledTimes(4);
   });
 
+  it('should replay a strategy trace step by step without affecting measured results', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const app = fixture.componentInstance;
+    const sourceText = `DIMENSION: 4
+NODE_COORD_SECTION
+1 0 0
+2 3 4
+3 4 4
+4 10 1
+EOF`;
+
+    await app.onFileSelected(fileSelectionEvent(sourceText));
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const stepButton = compiled.querySelector<HTMLButtonElement>('#step-visualization');
+
+    expect(compiled.querySelector('#visualizador')).not.toBeNull();
+    const primaryPlayer = app.visualizationPlayers[0];
+
+    expect(primaryPlayer.trace).toBeUndefined();
+    expect(compiled.querySelector('.visual-current-segment')).toBeNull();
+
+    stepButton?.click();
+    stepButton?.click();
+    stepButton?.click();
+    await fixture.whenStable();
+
+    expect(primaryPlayer.trace?.strategyId).toBe('exhaustive');
+    expect(primaryPlayer.stepIndex).toBe(2);
+    expect(app.currentVisualizationStep(primaryPlayer)?.type).toBe('comparison');
+    expect(compiled.querySelector('.visual-current-segment')).not.toBeNull();
+    expect(compiled.querySelectorAll('.visual-active-point')).toHaveLength(2);
+    expect(compiled.textContent).toContain('Se calcula la distancia entre los puntos 1 y 2.');
+
+    stepButton?.click();
+    await fixture.whenStable();
+
+    expect(app.currentVisualizationStep(primaryPlayer)?.type).toBe('best');
+    expect(compiled.querySelector('.visual-best-segment')).not.toBeNull();
+    expect(compiled.querySelectorAll('.visual-best-point')).toHaveLength(2);
+    expect(app.strategyCheck).toBeUndefined();
+  });
+
+  it('should compare two traces with synchronized code, labels and viewport controls', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const app = fixture.componentInstance;
+    const sourceText = `DIMENSION: 6
+NODE_COORD_SECTION
+1 0 0
+2 2 7
+3 4 3
+4 6 9
+5 8 2
+6 10 4
+EOF`;
+
+    await app.onFileSelected(fileSelectionEvent(sourceText));
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const compareInput = compiled.querySelector<HTMLInputElement>('#compare-visualizations');
+    const labelInput = compiled.querySelector<HTMLInputElement>('#show-point-labels');
+
+    compareInput?.click();
+    labelInput?.click();
+    await fixture.whenStable();
+
+    expect(app.isVisualizationComparisonEnabled).toBe(true);
+    expect(compiled.querySelectorAll('.laboratory-player')).toHaveLength(2);
+    expect(compiled.querySelectorAll('.plot-point-label')).toHaveLength(12);
+    expect(
+      [...compiled.querySelectorAll<HTMLSelectElement>('[id^="visualization-strategy-"]')].map(
+        (select) => select.value,
+      ),
+    ).toEqual(['exhaustive', 'divide-conquer-improved']);
+
+    compiled.querySelector<HTMLButtonElement>('#step-visualization')?.click();
+    await fixture.whenStable();
+
+    expect(app.visualizationPlayers.every((player) => player.trace !== undefined)).toBe(true);
+    expect(app.visualizationPlayers.map((player) => player.stepIndex)).toEqual([0, 0]);
+    expect(compiled.querySelectorAll('.code-line-active').length).toBeGreaterThanOrEqual(2);
+
+    const initialViewBox = compiled
+      .querySelector<SVGElement>('.visualization-plot')
+      ?.getAttribute('viewBox');
+    compiled.querySelector<HTMLButtonElement>('button[title="Acercar"]')?.click();
+    await fixture.whenStable();
+    const zoomedViewBox = compiled
+      .querySelector<SVGElement>('.visualization-plot')
+      ?.getAttribute('viewBox');
+
+    expect(app.visualizationZoom).toBe(1.25);
+    expect(zoomedViewBox).not.toBe(initialViewBox);
+  });
+
   it('should show a clear error when the dataset does not contain a pair', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
@@ -340,8 +537,8 @@ EOF`;
       'Se necesitan al menos dos puntos',
     );
     expect(compiled.querySelector('.strategy-table')).toBeNull();
-    expect(compiled.querySelectorAll('.plot-point')).toHaveLength(1);
-    expect(compiled.querySelector('.closest-segment')).toBeNull();
+    expect(compiled.querySelectorAll('.visualization-plot .plot-point')).toHaveLength(1);
+    expect(compiled.querySelector('.visual-best-segment')).toBeNull();
   });
 
   it('should run the experimental study through a worker and display progress and averages', async () => {

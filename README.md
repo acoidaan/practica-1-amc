@@ -1,5 +1,7 @@
 # Práctica 1 AMC — Par de puntos más cercano
 
+[![Continuous integration](https://github.com/acoidaan/practica-1-amc/actions/workflows/ci.yml/badge.svg)](https://github.com/acoidaan/practica-1-amc/actions/workflows/ci.yml)
+
 [Aplicación](https://practica-1-amc.vercel.app) · [Documentación](https://practica-1-amc.vercel.app/documentacion/) · [Memoria PDF](https://practica-1-amc.vercel.app/documentacion/downloads/memoria-practica-1-amc.pdf) · [Código en GitHub](https://github.com/acoidaan/practica-1-amc)
 
 Aplicación Angular para implementar, visualizar y comparar cuatro estrategias del problema del par de puntos más cercano:
@@ -9,7 +11,7 @@ Aplicación Angular para implementar, visualizar y comparar cuatro estrategias d
 - divide y vencerás básico;
 - divide y vencerás mejorado.
 
-Incluye carga y generación de datasets TSPLIB, HeapSort propio, visualización SVG, estudio experimental en Web Worker, exportación CSV, memoria VitePress y referencia TypeDoc.
+Incluye carga y generación de datasets TSPLIB, HeapSort propio, laboratorio SVG con código sincronizado y comparación lado a lado, estudio experimental en Web Worker, exportación CSV, memoria VitePress y referencia TypeDoc.
 
 ## Requisitos
 
@@ -38,7 +40,7 @@ npm audit
 git diff --check
 ```
 
-La suite actual contiene **20 archivos y 103 pruebas**.
+La suite actual contiene **22 archivos y 116 pruebas**. GitHub Actions ejecuta automáticamente las pruebas y la construcción completa de la aplicación, la memoria y la referencia TypeDoc.
 
 ## Documentación
 

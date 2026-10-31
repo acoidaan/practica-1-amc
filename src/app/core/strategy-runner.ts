@@ -10,13 +10,18 @@ import { exhaustiveSearchWithPruning } from './exhaustive-search-with-pruning';
 import { divideAndConquerSearch } from './divide-and-conquer-search';
 import { divideAndConquerImprovedSearch } from './divide-and-conquer-improved-search';
 import { copyPoints } from './point-copy';
+import type { SearchObserver } from './search-observer';
 
 /** Stable identifiers accepted by the experiment protocol and CSV format. */
 export type StrategyId =
   'exhaustive' | 'exhaustive-pruning' | 'divide-conquer' | 'divide-conquer-improved';
 
 /** Common callable contract implemented by each closest-pair algorithm. */
-export type SearchStrategy = (points: Point[], counter: DistanceCounter) => ClosestPair | undefined;
+export type SearchStrategy = (
+  points: Point[],
+  counter: DistanceCounter,
+  observer?: SearchObserver,
+) => ClosestPair | undefined;
 
 /** Injectable clock returning milliseconds. */
 export type Clock = () => number;

@@ -24,6 +24,11 @@ export default defineConfig({
   themeConfig: {
     siteTitle: 'AMC · Práctica 1',
     nav: [
+      {
+        text: '← Volver a la aplicación',
+        link: 'https://practica-1-amc.vercel.app/',
+        target: '_self',
+      },
       { text: 'Memoria', link: '/memoria' },
       { text: 'Guía de uso', link: '/guia-uso' },
       { text: 'Defensa', link: '/defensa' },
