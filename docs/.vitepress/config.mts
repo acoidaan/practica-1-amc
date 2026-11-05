@@ -31,7 +31,6 @@ export default defineConfig({
       },
       { text: 'Memoria', link: '/memoria' },
       { text: 'Guía de uso', link: '/guia-uso' },
-      { text: 'Defensa', link: '/defensa' },
       {
         text: 'API TypeScript',
         link: 'https://practica-1-amc.vercel.app/documentacion/api/',
@@ -51,7 +50,6 @@ export default defineConfig({
           { text: 'Inicio', link: '/' },
           { text: 'Memoria académica', link: '/memoria' },
           { text: 'Guía de uso', link: '/guia-uso' },
-          { text: 'Guion de defensa', link: '/defensa' },
           {
             text: 'Referencia TypeDoc',
             link: 'https://practica-1-amc.vercel.app/documentacion/api/',
