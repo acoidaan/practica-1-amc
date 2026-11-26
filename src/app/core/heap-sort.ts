@@ -7,6 +7,7 @@ function swap(points: Point[], firstIndex: number, secondIndex: number): void {
   [points[firstIndex], points[secondIndex]] = [points[secondIndex], points[firstIndex]];
 }
 
+/** Restores the max-heap property below `rootIndex` without recursion. */
 function siftDown(
   points: Point[],
   rootIndex: number,
@@ -37,10 +38,12 @@ function siftDown(
 }
 
 function heapSort(points: Point[], comparator: PointComparator): void {
+  // Leaves are already heaps; process internal nodes backwards to build one max-heap.
   for (let root = Math.floor(points.length / 2) - 1; root >= 0; root--) {
     siftDown(points, root, points.length, comparator);
   }
 
+  // Move the current maximum to its final suffix position, then repair the smaller heap.
   for (let end = points.length - 1; end > 0; end--) {
     swap(points, 0, end);
     siftDown(points, 0, end, comparator);

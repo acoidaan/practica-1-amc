@@ -1,0 +1,1097 @@
+<!-- Persistent navigation and theme controls. -->
+<header class="site-header">
+  <nav class="site-nav" aria-label="Navegación principal">
+    <a class="brand" href="#inicio" aria-label="Ir al inicio">
+      <span class="brand-mark" aria-hidden="true">P1</span>
+      <span>Closest Pair</span>
+    </a>
+
+    <div class="quick-nav" aria-label="Accesos rápidos">
+      <a
+        href="#visualizador"
+        [attr.aria-current]="isSectionActive('visualizador') ? 'location' : null"
+        >Laboratorio</a
+      >
+      <a
+        href="#comprobacion"
+        [attr.aria-current]="isSectionActive('comprobacion') ? 'location' : null"
+        >Comprobación</a
+      >
+      <a
+        href="#experimento"
+        [attr.aria-current]="isSectionActive('experimento') ? 'location' : null"
+        >Experimentos</a
+      >
+      <a href="/documentacion/">Documentación</a>
+    </div>
+
+    <div class="nav-actions">
+      <button
+        class="theme-toggle"
+        type="button"
+        aria-label="Modo oscuro"
+        [attr.aria-pressed]="isDarkTheme"
+        [attr.title]="isDarkTheme ? 'Usar modo claro' : 'Usar modo oscuro'"
+        (click)="toggleTheme()"
+      >
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.25"></circle>
+          <path
+            d="M12 2.25v2M12 19.75v2M4.25 12h-2M21.75 12h-2M5.1 5.1l1.4 1.4M17.5 17.5l1.4 1.4M18.9 5.1l-1.4 1.4M6.5 17.5l-1.4 1.4"
+          ></path>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z"></path>
+        </svg>
+        <span class="theme-thumb" aria-hidden="true"></span>
+      </button>
+
+      <div class="menu-shell" (mouseenter)="openMenu()" (mouseleave)="closeMenu()">
+        <button
+          class="menu-button"
+          type="button"
+          aria-controls="navigation-panel"
+          [attr.aria-label]="isMenuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'"
+          [attr.aria-expanded]="isMenuOpen"
+          [class.menu-button-open]="isMenuOpen"
+          (click)="toggleMenu()"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        @if (isMenuOpen) {
+          <div id="navigation-panel" class="navigation-panel">
+            <p class="navigation-label">Portal AMC</p>
+            <a href="/" (click)="closeMenu()">Todas las prácticas</a>
+            <a href="/practica-2" (click)="closeMenu()">Práctica 2 · Autómatas</a>
+            <p class="navigation-label">Explorar la práctica</p>
+            <a
+              href="#inicio"
+              [attr.aria-current]="isSectionActive('inicio') ? 'location' : null"
+              (click)="closeMenu()"
+              >Inicio</a
+            >
+            <a
+              href="#preparar-dataset"
+              [attr.aria-current]="isSectionActive('preparar-dataset') ? 'location' : null"
+              (click)="closeMenu()"
+              >Preparar dataset</a
+            >
+            <a
+              href="#dataset"
+              [attr.aria-current]="isSectionActive('dataset') ? 'location' : null"
+              (click)="closeMenu()"
+              >Dataset activo</a
+            >
+            <a
+              href="#visualizador"
+              [attr.aria-current]="isSectionActive('visualizador') ? 'location' : null"
+              (click)="closeMenu()"
+              >Laboratorio</a
+            >
+            <a
+              href="#comprobacion"
+              [attr.aria-current]="isSectionActive('comprobacion') ? 'location' : null"
+              (click)="closeMenu()"
+              >Comprobación</a
+            >
+            <a
+              href="#experimento"
+              [attr.aria-current]="isSectionActive('experimento') ? 'location' : null"
+              (click)="closeMenu()"
+              >Experimentos</a
+            >
+            <a href="/documentacion/" (click)="closeMenu()">Documentación</a>
+          </div>
+        }
+      </div>
+
+      <a
+        class="github-link"
+        href="https://github.com/acoidaan/practica-1-amc"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir el repositorio en GitHub"
+        title="Ver código en GitHub"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 2C6.48 2 2 6.59 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.05-.01-1.9-2.78.62-3.37-1.21-3.37-1.21-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .08 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.09a9.3 9.3 0 0 1 2.5.35c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.64 1.03 2.76 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.38-.01 2.49-.01 2.83 0 .27.18.59.69.49A10.27 10.27 0 0 0 22 12.25C22 6.59 17.52 2 12 2Z"
+          />
+        </svg>
+      </a>
+    </div>
+  </nav>
+</header>
+
+@if (isMenuOpen) {
+  <button
+    class="menu-backdrop"
+    type="button"
+    tabindex="-1"
+    aria-label="Cerrar menú"
+    (click)="closeMenu()"
+  ></button>
+}
+
+<main id="inicio">
+  <!-- Introductory route map; its completion state comes from the component state. -->
+  <section class="hero" aria-labelledby="page-title">
+    <p class="eyebrow">Algorítmica y Modelos de Computación</p>
+    <h1 id="page-title">Práctica 1 - Par de puntos más cercano</h1>
+    <p class="hero-copy">
+      Carga o genera un conjunto de puntos y compara cuatro estrategias algorítmicas en una misma
+      experiencia visual.
+    </p>
+    <a class="hero-link" href="#preparar-dataset"
+      >Comenzar análisis <span aria-hidden="true">↓</span></a
+    >
+  </section>
+
+  <nav class="journey" aria-label="Progreso por las etapas de la práctica">
+    <p class="journey-label">Recorrido de trabajo</p>
+    <div class="journey-track">
+      <a
+        href="#preparar-dataset"
+        class="journey-step"
+        [class.journey-step-active]="isSectionActive('inicio', 'preparar-dataset', 'dataset')"
+        [class.journey-step-complete]="dataset !== undefined"
+        [attr.aria-current]="
+          isSectionActive('inicio', 'preparar-dataset', 'dataset') ? 'step' : null
+        "
+      >
+        <span class="journey-marker" aria-hidden="true">{{ dataset ? '✓' : '1' }}</span>
+        <span>
+          <strong>Dataset</strong>
+          <small>{{ dataset ? 'Preparado' : 'Carga o genera puntos' }}</small>
+        </span>
+      </a>
+
+      <a
+        [attr.href]="dataset ? '#visualizador' : '#preparar-dataset'"
+        class="journey-step"
+        [class.journey-step-active]="isSectionActive('visualizador')"
+        [class.journey-step-complete]="hasStartedVisualization"
+        [attr.aria-current]="isSectionActive('visualizador') ? 'step' : null"
+      >
+        <span class="journey-marker" aria-hidden="true">{{
+          hasStartedVisualization ? '✓' : '2'
+        }}</span>
+        <span>
+          <strong>Laboratorio</strong>
+          <small>{{ hasStartedVisualization ? 'Traza creada' : 'Observa los algoritmos' }}</small>
+        </span>
+      </a>
+
+      <a
+        [attr.href]="dataset ? '#comprobacion' : '#preparar-dataset'"
+        class="journey-step"
+        [class.journey-step-active]="isSectionActive('comprobacion')"
+        [class.journey-step-complete]="strategyCheck !== undefined"
+        [attr.aria-current]="isSectionActive('comprobacion') ? 'step' : null"
+      >
+        <span class="journey-marker" aria-hidden="true">{{ strategyCheck ? '✓' : '3' }}</span>
+        <span>
+          <strong>Comprobación</strong>
+          <small>{{
+            strategyCheck ? 'Resultados verificados' : 'Contrasta las estrategias'
+          }}</small>
+        </span>
+      </a>
+
+      <a
+        href="#experimento"
+        class="journey-step"
+        [class.journey-step-active]="isSectionActive('experimento')"
+        [class.journey-step-complete]="experimentResult !== undefined"
+        [attr.aria-current]="isSectionActive('experimento') ? 'step' : null"
+      >
+        <span class="journey-marker" aria-hidden="true">{{ experimentResult ? '✓' : '4' }}</span>
+        <span>
+          <strong>Experimentos</strong>
+          <small>{{ experimentResult ? 'Estudio completado' : 'Mide y compara' }}</small>
+        </span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Dataset input boundary: uploaded TSPLIB or locally generated points. -->
+  <div id="preparar-dataset" class="source-grid section-anchor">
+    <section class="card">
+      <div class="section-heading">
+        <span class="step-number">01</span>
+        <div>
+          <h2>Cargar dataset TSPLIB</h2>
+          <p>Selecciona un fichero compatible desde tu equipo.</p>
+        </div>
+      </div>
+
+      <label class="file-picker">
+        <span>Seleccionar archivo .tsp</span>
+        <input type="file" accept=".tsp" (change)="onFileSelected($event)" />
+      </label>
+
+      @if (loadError) {
+        <p class="alert" role="alert">Error de carga: {{ loadError }}</p>
+      }
+    </section>
+
+    <section class="card">
+      <div class="section-heading">
+        <span class="step-number">02</span>
+        <div>
+          <h2>Generar dataset aleatorio</h2>
+          <p>Define el tamaño y el tipo de distribución.</p>
+        </div>
+      </div>
+
+      <form
+        class="generation-form"
+        (submit)="onGenerateDataset($event, sizeInput.value, sameXInput.checked)"
+      >
+        <label class="field" for="dataset-size">
+          <span>Número de puntos</span>
+          <input #sizeInput id="dataset-size" type="number" min="1" step="1" value="100" required />
+        </label>
+
+        <label class="mode-option" for="same-x">
+          <input #sameXInput id="same-x" type="checkbox" />
+          <span>
+            <strong>Misma coordenada x</strong>
+            <small>Genera el caso límite utilizado para comparar estrategias.</small>
+          </span>
+        </label>
+
+        <button class="primary-action" type="submit">Generar y descargar dataset</button>
+      </form>
+
+      @if (generationError) {
+        <p class="alert" role="alert">{{ generationError }}</p>
+      }
+    </section>
+  </div>
+
+  <section id="dataset" class="card dataset-card section-anchor">
+    <div class="section-heading">
+      <span class="step-number">03</span>
+      <div>
+        <h2>Dataset</h2>
+        <p>Conjunto de puntos activo para ejecutar los algoritmos.</p>
+      </div>
+    </div>
+
+    @if (dataset) {
+      <div class="dataset-meta">
+        <p>Archivo: {{ dataset.fileName }}</p>
+        <p>Número de puntos: {{ dataset.points.length }}</p>
+      </div>
+
+      <details class="point-details">
+        <summary>Ver los {{ dataset.points.length }} puntos del dataset</summary>
+        <ul class="point-list">
+          @for (point of dataset.points; track point.id) {
+            <li>Punto {{ point.id }}: ({{ point.x }}, {{ point.y }})</li>
+          }
+        </ul>
+      </details>
+
+      <a class="continue-link" href="#visualizador">
+        Continuar al laboratorio <span aria-hidden="true">↓</span>
+      </a>
+    } @else {
+      <p class="empty-state">No hay ningún dataset cargado.</p>
+    }
+  </section>
+
+  @if (dataset) {
+    <!-- The laboratory replays recorded traces; it never participates in benchmarks. -->
+    <section id="visualizador" class="card visualizer-card section-anchor">
+      <div class="section-heading">
+        <span class="step-number">04</span>
+        <div>
+          <h2>Laboratorio de algoritmos</h2>
+          <p>
+            Observa el plano, la recursión y el código TypeScript activo sin alterar el benchmark.
+          </p>
+        </div>
+      </div>
+
+      <div class="laboratory-control-bar">
+        <div class="laboratory-playback">
+          <button
+            id="toggle-visualization"
+            class="primary-action"
+            type="button"
+            [disabled]="dataset.points.length < 2 || dataset.points.length > maxVisualizationPoints"
+            (click)="toggleVisualization()"
+          >
+            @if (isVisualizationPlaying) {
+              Pausar
+            } @else if (isVisualizationComplete) {
+              Reproducir de nuevo
+            } @else {
+              Reproducir
+            }
+          </button>
+          <button
+            id="step-visualization"
+            class="secondary-action"
+            type="button"
+            [disabled]="
+              dataset.points.length < 2 ||
+              dataset.points.length > maxVisualizationPoints ||
+              isVisualizationComplete
+            "
+            (click)="stepVisualization()"
+          >
+            Avanzar un paso
+          </button>
+          <button
+            id="reset-visualization"
+            class="secondary-action"
+            type="button"
+            [disabled]="visualizationPlayers[0].trace === undefined"
+            (click)="resetVisualization()"
+          >
+            Reiniciar
+          </button>
+        </div>
+
+        <div class="laboratory-options">
+          <label class="compact-option" for="compare-visualizations">
+            <input
+              #compareVisualizations
+              id="compare-visualizations"
+              type="checkbox"
+              [checked]="isVisualizationComparisonEnabled"
+              (change)="setVisualizationComparisonEnabled(compareVisualizations.checked)"
+            />
+            <span>Comparar lado a lado</span>
+          </label>
+
+          <label class="compact-option" for="show-point-labels">
+            <input
+              #showPointLabels
+              id="show-point-labels"
+              type="checkbox"
+              [checked]="showVisualizationLabels"
+              (change)="setVisualizationLabelsVisible(showPointLabels.checked)"
+            />
+            <span>Mostrar IDs</span>
+          </label>
+
+          <label class="field visualization-speed" for="visualization-speed">
+            <span>{{ visualizationSpeed }} pasos/s</span>
+            <input
+              #visualizationSpeedInput
+              id="visualization-speed"
+              type="range"
+              min="1"
+              max="120"
+              step="1"
+              [value]="visualizationSpeed"
+              (input)="setVisualizationSpeed(+visualizationSpeedInput.value)"
+            />
+          </label>
+
+          <div class="viewport-controls" aria-label="Controles del plano">
+            <button
+              type="button"
+              aria-label="Alejar el plano"
+              title="Alejar"
+              (click)="zoomVisualization('out')"
+            >
+              −
+            </button>
+            <span>{{ visualizationZoom.toFixed(2) }}×</span>
+            <button
+              type="button"
+              aria-label="Acercar el plano"
+              title="Acercar"
+              (click)="zoomVisualization('in')"
+            >
+              +
+            </button>
+            <button
+              type="button"
+              aria-label="Mover el plano a la izquierda"
+              title="Mover a la izquierda"
+              (click)="panVisualization(-1, 0)"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              aria-label="Mover el plano hacia arriba"
+              title="Mover arriba"
+              (click)="panVisualization(0, -1)"
+            >
+              ↑
+            </button>
+            <button
+              type="button"
+              aria-label="Mover el plano hacia abajo"
+              title="Mover abajo"
+              (click)="panVisualization(0, 1)"
+            >
+              ↓
+            </button>
+            <button
+              type="button"
+              aria-label="Mover el plano a la derecha"
+              title="Mover a la derecha"
+              (click)="panVisualization(1, 0)"
+            >
+              →
+            </button>
+            <button
+              type="button"
+              aria-label="Restablecer la vista del plano"
+              title="Restablecer plano"
+              (click)="resetVisualizationViewport()"
+            >
+              Centrar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      @if (dataset.points.length > maxVisualizationPoints) {
+        <p class="visualizer-note">
+          Este dataset tiene {{ dataset.points.length }} puntos. La animación se limita a
+          {{ maxVisualizationPoints }} para evitar millones de eventos; la comprobación y los
+          experimentos siguen disponibles.
+        </p>
+      }
+
+      <!-- One player normally; a second independent player is added for comparison mode. -->
+      <div
+        class="laboratory-grid"
+        [class.laboratory-grid-comparison]="isVisualizationComparisonEnabled"
+      >
+        @for (player of activeVisualizationPlayers; track player.key) {
+          <article class="laboratory-player">
+            <header class="laboratory-player-header">
+              <label class="field" [attr.for]="'visualization-strategy-' + player.key">
+                <span>{{
+                  player.key === 'primary' ? 'Algoritmo principal' : 'Segundo algoritmo'
+                }}</span>
+                <select
+                  #playerStrategy
+                  [id]="'visualization-strategy-' + player.key"
+                  (change)="setVisualizationStrategy(player.key, playerStrategy.value)"
+                >
+                  @for (strategy of experimentStrategies; track strategy.id) {
+                    <option [value]="strategy.id" [selected]="strategy.id === player.strategyId">
+                      {{ strategy.name }}
+                    </option>
+                  }
+                </select>
+              </label>
+
+              @if (player.trace) {
+                <div class="visualizer-progress">
+                  <span>
+                    Paso {{ visualizationProgressValue(player) }} de {{ player.trace.steps.length }}
+                  </span>
+                  <progress
+                    [value]="visualizationProgressValue(player)"
+                    [max]="player.trace.steps.length"
+                  ></progress>
+                </div>
+              }
+            </header>
+
+            <div class="laboratory-player-content">
+              <figure class="point-figure visualizer-figure">
+                @if (player.plot; as activePlot) {
+                  <svg
+                    class="point-plot visualization-plot"
+                    [attr.viewBox]="visualizationViewBox"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    [attr.aria-labelledby]="'visualization-title-' + player.key"
+                  >
+                    <title [id]="'visualization-title-' + player.key">
+                      Ejecución de {{ algorithmCodeSnippet(player).title }}
+                    </title>
+
+                    @if (activePlot.strip) {
+                      <rect
+                        class="visual-strip"
+                        [attr.x]="activePlot.strip.x"
+                        y="0"
+                        [attr.width]="activePlot.strip.width"
+                        [attr.height]="activePlot.height"
+                      ></rect>
+                    }
+
+                    @if (activePlot.dividerPlotX !== undefined) {
+                      <line
+                        class="visual-divider"
+                        [attr.x1]="activePlot.dividerPlotX"
+                        y1="0"
+                        [attr.x2]="activePlot.dividerPlotX"
+                        [attr.y2]="activePlot.height"
+                      ></line>
+                    }
+
+                    @if (activePlot.segment) {
+                      <line
+                        class="visual-best-segment"
+                        [attr.x1]="activePlot.segment.x1"
+                        [attr.y1]="activePlot.segment.y1"
+                        [attr.x2]="activePlot.segment.x2"
+                        [attr.y2]="activePlot.segment.y2"
+                      ></line>
+                    }
+
+                    @if (activePlot.activeSegment) {
+                      <line
+                        class="visual-current-segment"
+                        [class.visual-pruned-segment]="
+                          currentVisualizationStep(player)?.type === 'prune'
+                        "
+                        [attr.x1]="activePlot.activeSegment.x1"
+                        [attr.y1]="activePlot.activeSegment.y1"
+                        [attr.x2]="activePlot.activeSegment.x2"
+                        [attr.y2]="activePlot.activeSegment.y2"
+                      ></line>
+                    }
+
+                    @for (plottedPoint of activePlot.points; track plottedPoint.point.id) {
+                      <g
+                        [class.visual-muted-point]="
+                          currentVisualizationStep(player) !== undefined &&
+                          !plottedPoint.isInActiveRange
+                        "
+                      >
+                        <circle
+                          class="plot-point"
+                          [class.visual-best-point]="plottedPoint.isClosest"
+                          [class.visual-active-point]="plottedPoint.isActive"
+                          [attr.cx]="plottedPoint.plotX"
+                          [attr.cy]="plottedPoint.plotY"
+                          [attr.r]="plottedPoint.isClosest || plottedPoint.isActive ? 6 : 3"
+                        >
+                          <title>
+                            Punto {{ plottedPoint.point.id }}: ({{ plottedPoint.point.x }},
+                            {{ plottedPoint.point.y }})
+                          </title>
+                        </circle>
+                        @if (showVisualizationLabels) {
+                          <text
+                            class="plot-point-label"
+                            [attr.x]="plottedPoint.plotX + 8"
+                            [attr.y]="plottedPoint.plotY - 8"
+                          >
+                            {{ plottedPoint.point.id }}
+                          </text>
+                        }
+                      </g>
+                    }
+                  </svg>
+                }
+
+                <figcaption class="visualization-legend">
+                  <span><i class="legend-current"></i> Comparación</span>
+                  <span><i class="legend-pruned"></i> Poda</span>
+                  <span><i class="legend-best"></i> Mejor pareja</span>
+                  <span><i class="legend-strip"></i> Franja 2δ</span>
+                </figcaption>
+              </figure>
+
+              @if (algorithmCodeSnippet(player); as snippet) {
+                <section class="code-execution-panel">
+                  <header>
+                    <p class="code-panel-eyebrow">Código en ejecución</p>
+                    <h3>{{ snippet.title }}</h3>
+                    <p>{{ snippet.summary }}</p>
+                    <a [href]="snippet.sourceUrl" target="_blank" rel="noopener noreferrer">
+                      Abrir archivo completo ↗
+                    </a>
+                  </header>
+                  <ol class="code-lines">
+                    @for (line of snippet.lines; track line.number) {
+                      <li
+                        [class.code-line-active]="isCodeLineActive(player, line)"
+                        [attr.aria-current]="isCodeLineActive(player, line) ? 'step' : null"
+                      >
+                        <span class="code-line-number">{{ line.number }}</span>
+                        <code [style.padding-left.rem]="line.indent * 1.05">{{ line.code }}</code>
+                      </li>
+                    }
+                  </ol>
+                </section>
+              }
+            </div>
+
+            <aside class="visualizer-panel" aria-live="polite">
+              @if (currentVisualizationStep(player); as step) {
+                <p class="visualizer-event">{{ describeVisualizationStep(step) }}</p>
+                <dl class="visualizer-stats">
+                  <div>
+                    <dt>Nivel recursivo</dt>
+                    <dd>{{ step.depth ?? '—' }}</dd>
+                  </div>
+                  <div>
+                    <dt>Distancias calculadas</dt>
+                    <dd>{{ step.distanceCalculations }}</dd>
+                  </div>
+                  <div>
+                    <dt>Distancia candidata</dt>
+                    <dd>
+                      @if (step.candidateDistance !== undefined) {
+                        {{ formatDistance(step.candidateDistance) }}
+                      } @else {
+                        —
+                      }
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Mejor distancia</dt>
+                    <dd>
+                      @if (step.bestPair) {
+                        {{ formatDistance(step.bestPair.distance) }}
+                      } @else {
+                        —
+                      }
+                    </dd>
+                  </div>
+                </dl>
+              } @else {
+                <p class="visualizer-placeholder">
+                  Pulsa reproducir o avanzar un paso. El plano y el código se actualizarán juntos.
+                </p>
+              }
+            </aside>
+          </article>
+        }
+      </div>
+
+      @if (visualizationError) {
+        <p class="alert" role="alert">{{ visualizationError }}</p>
+      }
+
+      <a class="continue-link" href="#comprobacion">
+        Continuar a la comprobación <span aria-hidden="true">↓</span>
+      </a>
+    </section>
+
+    <!-- Correctness check and assignment-required TSPLIB exports. -->
+    <section id="comprobacion" class="card result-card section-anchor">
+      <div class="section-heading">
+        <span class="step-number">05</span>
+        <div>
+          <h2>Comprobación de estrategias</h2>
+          <p>Ejecuta las cuatro y recibe los resultados aquí mismo, sin saltar de sección.</p>
+        </div>
+      </div>
+
+      <button
+        id="check-strategies"
+        class="primary-action"
+        type="button"
+        (click)="runStrategyCheck()"
+      >
+        Comprobar las cuatro estrategias
+      </button>
+
+      @if (strategyCheckError) {
+        <p class="alert" role="alert">{{ strategyCheckError }}</p>
+      }
+
+      @if (strategyCheck) {
+        @if (strategyCheck.distancesMatch) {
+          <p class="status-message success-message">
+            Las cuatro estrategias coinciden en la distancia mínima.
+          </p>
+        } @else {
+          <p class="alert" role="alert">
+            Las estrategias no coinciden. Revisa los algoritmos antes de utilizar las exportaciones.
+          </p>
+        }
+
+        <div class="table-shell">
+          <table class="strategy-table">
+            <thead>
+              <tr>
+                <th scope="col">Estrategia</th>
+                <th scope="col">Punto 1</th>
+                <th scope="col">Punto 2</th>
+                <th scope="col">Distancia</th>
+                <th scope="col">Calculadas</th>
+                <th scope="col">Tiempo (ms)</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (execution of strategyCheck.executions; track execution.id) {
+                <tr class="strategy-row" [attr.data-strategy]="execution.id">
+                  <th scope="row">{{ execution.name }}</th>
+                  <td class="point-cell">{{ formatPoint(execution.result.closestPair.first) }}</td>
+                  <td class="point-cell">{{ formatPoint(execution.result.closestPair.second) }}</td>
+                  <td class="numeric-cell distance-value">
+                    {{ formatDistance(execution.result.closestPair.distance) }}
+                  </td>
+                  <td class="numeric-cell calculations-value">
+                    {{ execution.result.distanceCalculations }}
+                  </td>
+                  <td class="numeric-cell time-value">
+                    {{ formatMilliseconds(execution.result.elapsedMilliseconds) }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="download-section">
+          <div>
+            <h3>Ficheros resultantes</h3>
+            <p>Descarga por separado el resultado producido por cada estrategia.</p>
+          </div>
+          <div class="download-grid">
+            @for (execution of strategyCheck.executions; track execution.id) {
+              <button
+                class="secondary-action download-action"
+                type="button"
+                [attr.data-file-name]="execution.outputFileName"
+                (click)="downloadStrategyOutput(execution)"
+              >
+                Descargar {{ execution.outputFileName }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <a class="continue-link" href="#experimento">
+        Continuar a los experimentos <span aria-hidden="true">↓</span>
+      </a>
+    </section>
+  }
+
+  <!-- Long-running averaged measurements are delegated to a Web Worker. -->
+  <section id="experimento" class="card experiment-card section-anchor">
+    <div class="section-heading">
+      <span class="step-number">06</span>
+      <div>
+        <h2>Estudio experimental</h2>
+        <p>Compara las cuatro estrategias sin bloquear la interfaz.</p>
+      </div>
+    </div>
+
+    <div class="experiment-settings">
+      <p>
+        Tallas: {{ experimentSizes.join(', ') }} · Repeticiones por talla:
+        {{ experimentRepetitions }}
+      </p>
+
+      <fieldset class="strategy-selection" [disabled]="isExperimentRunning">
+        <legend>Estrategias para comparar dos</legend>
+
+        <div class="strategy-selection-grid">
+          @for (strategy of experimentStrategies; track strategy.id) {
+            <label class="mode-option">
+              <input
+                #strategySelection
+                type="checkbox"
+                [checked]="selectedExperimentStrategyIds.includes(strategy.id)"
+                (change)="setExperimentStrategySelected(strategy.id, strategySelection.checked)"
+              />
+              <span>
+                <strong>{{ strategy.name }}</strong>
+              </span>
+            </label>
+          }
+        </div>
+
+        <p class="selection-hint">Seleccionadas: {{ selectedExperimentStrategyIds.length }} de 2</p>
+      </fieldset>
+
+      <label class="mode-option" for="experiment-same-x">
+        <input
+          #experimentSameX
+          id="experiment-same-x"
+          type="checkbox"
+          [disabled]="isExperimentRunning"
+        />
+        <span>
+          <strong>Misma coordenada x</strong>
+          <small>Ejecuta el estudio sobre el peor caso vertical.</small>
+        </span>
+      </label>
+    </div>
+
+    <div class="experiment-actions">
+      <button
+        id="run-experiment"
+        class="primary-action"
+        type="button"
+        [disabled]="isExperimentRunning"
+        (click)="runExperimentStudy(experimentSameX.checked, allExperimentStrategyIds)"
+      >
+        @if (isExperimentRunning) {
+          Estudio en curso
+        } @else {
+          Comparar las cuatro estrategias
+        }
+      </button>
+
+      <button
+        id="run-two-experiment"
+        class="secondary-action"
+        type="button"
+        [disabled]="isExperimentRunning || !canCompareTwoStrategies"
+        (click)="runExperimentStudy(experimentSameX.checked, selectedExperimentStrategyIds)"
+      >
+        Comparar las dos seleccionadas
+      </button>
+
+      @if (isExperimentRunning) {
+        <button
+          id="cancel-experiment"
+          class="secondary-action"
+          type="button"
+          (click)="cancelExperimentStudy()"
+        >
+          Cancelar
+        </button>
+      }
+    </div>
+
+    @if (isExperimentRunning) {
+      <div class="experiment-progress" aria-live="polite">
+        @if (experimentProgress) {
+          <progress
+            [value]="experimentProgress.completedExperiments"
+            [max]="experimentProgress.totalExperiments"
+          ></progress>
+          @if (experimentProgress.completedExperiments === 0) {
+            <p>
+              Preparando el primer experimento · 0 de
+              {{ experimentProgress.totalExperiments }} completados
+            </p>
+          } @else {
+            <p>
+              {{ experimentProgress.completedExperiments }} de
+              {{ experimentProgress.totalExperiments }} experimentos · talla
+              {{ experimentProgress.currentSize }} · repetición
+              {{ experimentProgress.currentRepetition }}
+            </p>
+          }
+        } @else {
+          <progress></progress>
+          <p>Preparando el primer experimento…</p>
+        }
+      </div>
+    }
+
+    @if (experimentError) {
+      <p class="alert" role="alert">{{ experimentError }}</p>
+    }
+
+    @if (experimentResult) {
+      <!-- The same immutable result drives both tables, the SVG chart and CSV export. -->
+      <div class="experiment-results">
+        @if (experimentResultConfig; as resultConfig) {
+          <p class="experiment-result-summary">
+            Distribución:
+            <strong>{{ resultConfig.sameX ? 'misma coordenada x' : 'caso general' }}</strong>
+            · {{ resultConfig.repetitions }} repeticiones por talla ·
+            {{ resultConfig.strategyIds.length }} estrategias
+          </p>
+        }
+
+        <h3>Tiempos medios</h3>
+        <div class="table-shell">
+          <table class="strategy-table experiment-table">
+            <thead>
+              <tr>
+                <th scope="col">Talla</th>
+                @for (strategy of experimentResultStrategies; track strategy.id) {
+                  <th scope="col">{{ strategy.name }} (ms)</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of experimentResult.rows; track row.size) {
+                <tr class="experiment-row">
+                  <th scope="row">{{ row.size }}</th>
+                  @for (strategy of row.strategies; track strategy.id) {
+                    <td class="numeric-cell experiment-time">
+                      {{ formatMilliseconds(strategy.averageElapsedMilliseconds) }}
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Distancias euclídeas calculadas</h3>
+        <div class="table-shell">
+          <table class="strategy-table experiment-table">
+            <thead>
+              <tr>
+                <th scope="col">Talla</th>
+                @for (strategy of experimentResultStrategies; track strategy.id) {
+                  <th scope="col">{{ strategy.name }} (media)</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of experimentResult.rows; track row.size) {
+                <tr class="experiment-calculation-row">
+                  <th scope="row">{{ row.size }}</th>
+                  @for (strategy of row.strategies; track strategy.id) {
+                    <td class="numeric-cell experiment-calculations">
+                      {{ formatAverageCalculations(strategy.averageDistanceCalculations) }}
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (experimentChart; as chart) {
+          <section class="experiment-chart-section" aria-labelledby="experiment-chart-title">
+            <h3 id="experiment-chart-title">Evolución del tiempo medio</h3>
+
+            <div class="experiment-chart-shell">
+              <svg
+                class="experiment-chart"
+                role="img"
+                aria-labelledby="experiment-chart-svg-title"
+                [attr.viewBox]="'0 0 ' + chart.width + ' ' + chart.height"
+              >
+                <title id="experiment-chart-svg-title">Tiempo medio por talla y estrategia</title>
+
+                @for (tick of chart.yTicks; track tick.value) {
+                  <line
+                    class="experiment-chart-grid"
+                    [attr.x1]="chart.plotLeft"
+                    [attr.x2]="chart.plotRight"
+                    [attr.y1]="tick.y"
+                    [attr.y2]="tick.y"
+                  />
+                  <text
+                    class="experiment-chart-tick"
+                    text-anchor="end"
+                    dominant-baseline="middle"
+                    [attr.x]="chart.plotLeft - 10"
+                    [attr.y]="tick.y"
+                  >
+                    {{ tick.label }}
+                  </text>
+                }
+
+                @for (tick of chart.xTicks; track tick.value) {
+                  <line
+                    class="experiment-chart-tick-mark"
+                    [attr.x1]="tick.x"
+                    [attr.x2]="tick.x"
+                    [attr.y1]="chart.plotBottom"
+                    [attr.y2]="chart.plotBottom + 6"
+                  />
+                  <text
+                    class="experiment-chart-tick"
+                    text-anchor="middle"
+                    [attr.x]="tick.x"
+                    [attr.y]="chart.plotBottom + 23"
+                  >
+                    {{ tick.value }}
+                  </text>
+                }
+
+                <line
+                  class="experiment-chart-axis"
+                  [attr.x1]="chart.plotLeft"
+                  [attr.x2]="chart.plotLeft"
+                  [attr.y1]="chart.plotTop"
+                  [attr.y2]="chart.plotBottom"
+                />
+                <line
+                  class="experiment-chart-axis"
+                  [attr.x1]="chart.plotLeft"
+                  [attr.x2]="chart.plotRight"
+                  [attr.y1]="chart.plotBottom"
+                  [attr.y2]="chart.plotBottom"
+                />
+
+                @for (series of chart.series; track series.id) {
+                  <polyline
+                    class="experiment-chart-line"
+                    fill="none"
+                    [attr.stroke]="series.color"
+                    [attr.points]="series.polylinePoints"
+                  />
+
+                  @for (point of series.points; track point.size) {
+                    <circle
+                      class="experiment-chart-point"
+                      [attr.cx]="point.x"
+                      [attr.cy]="point.y"
+                      [attr.fill]="series.color"
+                      r="4"
+                    >
+                      <title>
+                        {{ series.name }} · n={{ point.size }} ·
+                        {{ formatMilliseconds(point.averageElapsedMilliseconds) }} ms
+                      </title>
+                    </circle>
+                  }
+                }
+
+                <text
+                  class="experiment-chart-axis-title"
+                  text-anchor="middle"
+                  [attr.x]="chart.width / 2"
+                  [attr.y]="chart.height - 8"
+                >
+                  Talla
+                </text>
+                <text
+                  class="experiment-chart-axis-title"
+                  text-anchor="middle"
+                  transform="rotate(-90)"
+                  [attr.x]="-(chart.plotTop + chart.plotBottom) / 2"
+                  y="18"
+                >
+                  Tiempo medio (ms)
+                </text>
+              </svg>
+            </div>
+
+            <div class="experiment-chart-legend" aria-label="Leyenda">
+              @for (series of chart.series; track series.id) {
+                <span>
+                  <i [style.background-color]="series.color"></i>
+                  {{ series.name }}
+                </span>
+              }
+            </div>
+          </section>
+        }
+
+        <div class="experiment-export">
+          <div>
+            <h3>Exportar resultados</h3>
+            <p>Guarda la metodología y ambas medias en un fichero CSV.</p>
+          </div>
+          <button
+            id="download-experiment-results"
+            class="secondary-action"
+            type="button"
+            (click)="downloadExperimentResults()"
+          >
+            Descargar CSV
+          </button>
+        </div>
+      </div>
+    }
+  </section>
+</main>

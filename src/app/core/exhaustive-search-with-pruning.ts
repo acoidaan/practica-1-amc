@@ -32,6 +32,8 @@ export function exhaustiveSearchWithPruning(
       const deltaX = points[j].x - points[i].x;
 
       if (best !== undefined && deltaX >= best.distance) {
+        // Euclidean distance is never smaller than the horizontal separation.
+        // Because x is sorted, all later candidates for this i can also be discarded.
         observer?.prune(points[i], points[j], 'horizontal', counter.calculations);
         break;
       }

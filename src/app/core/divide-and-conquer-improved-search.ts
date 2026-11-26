@@ -3,6 +3,11 @@ import { heapSortByX, heapSortByY } from './heap-sort';
 import { distanceBetween } from './distance';
 import type { SearchObserver } from './search-observer';
 
+/**
+ * Solves the half-open range `[start, end)` while carrying the same points in
+ * `y` order. Keeping both orders is the key invariant that avoids sorting every
+ * recursive strip again and preserves the overall $\Theta(n\log n)$ bound.
+ */
 function closestPairInRange(
   pointsByX: readonly Point[],
   pointsByY: readonly Point[],
@@ -56,6 +61,7 @@ function closestPairInRange(
   const leftPointsByY: Point[] = [];
   const rightPointsByY: Point[] = [];
 
+  // A linear stable partition preserves the existing y order in both children.
   for (const point of pointsByY) {
     const xIndex = xIndexByPoint.get(point);
 
@@ -63,6 +69,7 @@ function closestPairInRange(
       throw new Error('Point is missing from the x-order index');
     }
 
+    // Object identity is safe here because every order contains the same Point objects.
     if (xIndex < middle) {
       leftPointsByY.push(point);
     } else {
@@ -116,6 +123,7 @@ function closestPairInRange(
 
   const strip: Point[] = [];
 
+  // Since pointsByY is already sorted, filtering it also leaves the strip sorted by y.
   for (const point of pointsByY) {
     if (Math.abs(point.x - dividerX) < delta) {
       strip.push(point);
@@ -129,6 +137,8 @@ function closestPairInRange(
   );
 
   for (let i = 0; i < strip.length - 1; i++) {
+    // The geometric packing argument used by the assignment bounds the search
+    // to the next eleven points in y order, making strip processing linear.
     const lastSuccessor = Math.min(i + 11, strip.length - 1);
 
     const firstXIndex = xIndexByPoint.get(strip[i]);
@@ -143,6 +153,7 @@ function closestPairInRange(
       const deltaY = strip[j].y - strip[i].y;
 
       if (deltaY >= best.distance) {
+        // Later successors have an equal or larger y gap, so none can improve `best`.
         observer?.prune(strip[i], strip[j], 'vertical', counter.calculations);
         break;
       }
@@ -156,6 +167,7 @@ function closestPairInRange(
       const secondIsLeft = secondXIndex < middle;
 
       if (firstIsLeft === secondIsLeft) {
+        // Same-half pairs were already considered by that recursive result.
         continue;
       }
 
@@ -198,6 +210,8 @@ export function divideAndConquerImprovedSearch(
   observer?.phase('sort-x', { activePoints: points, depth: 0 }, counter.calculations);
   heapSortByX(points);
 
+  // The index map lets the y-ordered view identify each point's recursive half
+  // in O(1), instead of repeatedly searching the x-ordered array.
   const xIndexByPoint = new Map<Point, number>();
 
   for (let index = 0; index < points.length; index++) {

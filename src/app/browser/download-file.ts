@@ -1,3 +1,7 @@
+/**
+ * Offers generated text as a browser download without sending it to a server.
+ * The temporary object URL is revoked immediately after the synthetic click.
+ */
 export function downloadTextFile(fileName: string, sourceText: string): void {
   const blob = new Blob([sourceText], {
     type: 'text/plain;charset=utf-8',

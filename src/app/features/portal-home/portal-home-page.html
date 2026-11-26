@@ -1,0 +1,52 @@
+<main class="portal-shell">
+  <header class="portal-header">
+    <div>
+      <p class="eyebrow">Algorítmica y Modelos de Computación</p>
+      <a class="brand" routerLink="/">Laboratorio AMC</a>
+    </div>
+    <a class="docs-link" href="/documentacion/">Documentación</a>
+  </header>
+
+  <section class="hero" aria-labelledby="portal-title">
+    <p class="hero-kicker">Prácticas interactivas</p>
+    <h1 id="portal-title">Un portal, dos laboratorios algorítmicos.</h1>
+    <p>
+      Accede a la implementación del par de puntos más cercano o al simulador de autómatas
+      finitos. Cada práctica conserva su propio estado, código y flujo de trabajo.
+    </p>
+  </section>
+
+  <section class="practice-grid" aria-label="Prácticas disponibles">
+    <article class="practice-card practice-one">
+      <div class="card-number" aria-hidden="true">01</div>
+      <p class="card-label">Práctica completada</p>
+      <h2>Par de puntos más cercano</h2>
+      <p>
+        Cuatro estrategias, visualización de trazas, comprobación automática y estudio
+        experimental mediante Web Worker.
+      </p>
+      <ul>
+        <li>Datasets TSPLIB</li>
+        <li>Laboratorio paso a paso</li>
+        <li>Experimentos y exportación</li>
+      </ul>
+      <a class="card-action" routerLink="/practica-1">Abrir Práctica 1 <span>→</span></a>
+    </article>
+
+    <article class="practice-card practice-two">
+      <div class="card-number" aria-hidden="true">02</div>
+      <p class="card-label">Versión funcional</p>
+      <h2>Simulador AFD y AFND</h2>
+      <p>
+        Construcción, carga y simulación completa o paso a paso de autómatas deterministas y
+        no deterministas con transiciones lambda.
+      </p>
+      <ul>
+        <li>Entrada manual y desde fichero</li>
+        <li>Macroestados y clausuras lambda</li>
+        <li>Representación visual</li>
+      </ul>
+      <a class="card-action" routerLink="/practica-2">Abrir Práctica 2 <span>→</span></a>
+    </article>
+  </section>
+</main>

@@ -3,6 +3,7 @@ import { heapSortByX } from './heap-sort';
 import { distanceBetween } from './distance';
 import type { SearchObserver } from './search-observer';
 
+/** Recursively solves the half-open x-sorted range `[start, end)`. */
 function closestPairInRange(
   points: readonly Point[],
   start: number,
@@ -78,6 +79,7 @@ function closestPairInRange(
   const leftStrip: Point[] = [];
   const rightStrip: Point[] = [];
 
+  // Only points less than delta from the divider can form a better cross-half pair.
   for (let i = start; i < middle; i++) {
     if (dividerX - points[i].x < delta) {
       leftStrip.push(points[i]);
@@ -101,6 +103,7 @@ function closestPairInRange(
       const deltaX = rightPoint.x - leftPoint.x;
 
       if (deltaX >= best.distance) {
+        // rightStrip follows x order, so every later right point is at least as far away.
         observer?.prune(leftPoint, rightPoint, 'horizontal', counter.calculations);
         break;
       }

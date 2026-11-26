@@ -1,0 +1,299 @@
+<header class="site-header">
+  <nav class="site-nav" aria-label="Navegación de la Práctica 2">
+    <a class="brand" routerLink="/">
+      <span aria-hidden="true">P2</span>
+      <strong>Automata Lab</strong>
+    </a>
+    <div class="nav-links">
+      <a routerLink="/">Portal AMC</a>
+      <a routerLink="/practica-1">Práctica 1</a>
+      <a href="/documentacion/">Documentación</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="practice-two-title">
+    <p class="eyebrow">Práctica 2 · AFD y AFND</p>
+    <h1 id="practice-two-title">Construye. Simula. Comprueba.</h1>
+    <p>
+      Introduce el autómata manualmente o desde un fichero, analiza una cadena completa y recorre
+      su ejecución configuración a configuración.
+    </p>
+  </section>
+
+  <section class="workspace" aria-label="Definición del autómata">
+    <article class="panel source-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="section-number">01 · Definición</p>
+          <h2>Autómata de entrada</h2>
+        </div>
+        <span class="source-badge" [class.source-badge-dirty]="isSourceDirty">
+          {{ isSourceDirty ? 'Cambios sin aplicar' : sourceName }}
+        </span>
+      </div>
+
+      <div class="source-actions">
+        <button type="button" class="quiet-button" (click)="loadExample('AFD')">Ejemplo AFD</button>
+        <button type="button" class="quiet-button" (click)="loadExample('AFND')">Ejemplo AFND</button>
+        <label class="file-button">
+          Cargar fichero
+          <input type="file" accept=".txt,text/plain" (change)="onFileSelected($event)" />
+        </label>
+      </div>
+
+      <label class="field-label" for="automaton-source">Especificación</label>
+      <textarea
+        id="automaton-source"
+        class="source-editor"
+        spellcheck="false"
+        [ngModel]="sourceText"
+        (ngModelChange)="onSourceChanged($event)"
+        aria-describedby="source-help"
+      ></textarea>
+      <p id="source-help" class="field-help">
+        Puedes escribir aquí todos los datos o cargar un fichero con el formato oficial.
+      </p>
+
+      @if (parseError) {
+        <div class="message message-error" role="alert">
+          <strong>No se pudo construir el autómata</strong>
+          <pre>{{ parseError }}</pre>
+        </div>
+      }
+
+      <div class="primary-row">
+        <button type="button" class="primary-button" (click)="buildAutomaton()">
+          Validar y construir
+        </button>
+        <button
+          type="button"
+          class="secondary-button"
+          [disabled]="automaton === undefined"
+          (click)="downloadAutomaton()"
+        >
+          Descargar normalizado
+        </button>
+      </div>
+    </article>
+
+    <article class="panel summary-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="section-number">02 · Modelo activo</p>
+          <h2>Resumen validado</h2>
+        </div>
+        @if (automaton) {
+          <span class="type-badge">{{ automaton.definition.type }}</span>
+        }
+      </div>
+
+      @if (automaton; as process) {
+        <dl class="facts-grid">
+          <div>
+            <dt>Estados</dt>
+            <dd>{{ process.definition.states.length }}</dd>
+          </div>
+          <div>
+            <dt>Inicial</dt>
+            <dd>{{ process.definition.initialState }}</dd>
+          </div>
+          <div>
+            <dt>Finales</dt>
+            <dd>{{ formatStates(process.definition.finalStates) }}</dd>
+          </div>
+          <div>
+            <dt>Alfabeto</dt>
+            <dd>
+              @if (alphabet.length > 0) {
+                @for (symbol of alphabet; track symbol) {
+                  <code>{{ formatSymbol(symbol) }}</code>
+                }
+              } @else {
+                ∅
+              }
+            </dd>
+          </div>
+        </dl>
+
+        <div class="transition-block">
+          <h3>Transiciones</h3>
+          @if (process.definition.transitions.length > 0) {
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Origen</th>
+                    <th>Símbolo</th>
+                    <th>Destino</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (transition of process.definition.transitions; track transition.id) {
+                    <tr [class.active-transition]="isSymbolTransitionActive(transition.id)">
+                      <td>{{ transition.from }}</td>
+                      <td><code>{{ formatSymbol(transition.symbol) }}</code></td>
+                      <td>{{ formatStates(transition.to) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="empty-copy">No hay transiciones que consuman símbolos.</p>
+          }
+        </div>
+
+        @if (process.definition.type === 'AFND') {
+          <div class="transition-block">
+            <h3>Transiciones lambda</h3>
+            @if (process.definition.lambdaTransitions.length > 0) {
+              <div class="lambda-list">
+                @for (transition of process.definition.lambdaTransitions; track transition.id) {
+                  <div
+                    class="lambda-row"
+                    [class.active-transition]="isLambdaTransitionActive(transition.id)"
+                  >
+                    <span>{{ transition.from }}</span>
+                    <code>λ</code>
+                    <span>{{ formatStates(transition.to) }}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="empty-copy">Este AFND no contiene transiciones lambda.</p>
+            }
+          </div>
+        }
+      } @else {
+        <div class="empty-state">
+          <strong>No hay un autómata válido.</strong>
+          <p>Corrige la especificación y vuelve a construirlo.</p>
+        </div>
+      }
+    </article>
+  </section>
+
+  <section class="simulation-section" aria-labelledby="simulation-title">
+    <div class="section-heading-wide">
+      <div>
+        <p class="section-number">03 · Simulación</p>
+        <h2 id="simulation-title">Cadena de entrada</h2>
+      </div>
+      <p>La ejecución completa y el reproductor paso a paso utilizan exactamente la misma traza.</p>
+    </div>
+
+    <div class="simulation-controls">
+      <label for="input-string">
+        Cadena a reconocer
+        <textarea
+          id="input-string"
+          rows="2"
+          [(ngModel)]="inputText"
+          (ngModelChange)="clearSimulation()"
+          placeholder="Cadena vacía permitida"
+          [disabled]="automaton === undefined"
+        ></textarea>
+      </label>
+      <div class="simulation-buttons">
+        <button
+          type="button"
+          class="primary-button"
+          [disabled]="automaton === undefined"
+          (click)="simulateAll()"
+        >
+          Simular de una vez
+        </button>
+        <button
+          type="button"
+          class="secondary-button"
+          [disabled]="automaton === undefined"
+          (click)="startStepSimulation()"
+        >
+          Iniciar paso a paso
+        </button>
+      </div>
+    </div>
+
+    @if (trace; as simulation) {
+      <div class="simulation-dashboard">
+        <article class="current-card">
+          <div class="current-card-heading">
+            <div>
+              <p class="current-label">
+                {{ simulationMode === 'full' ? 'Resultado completo' : 'Configuración actual' }}
+              </p>
+              <strong>
+                Paso {{ visibleStepIndex }} de {{ simulation.steps.length - 1 }}
+              </strong>
+            </div>
+            @if (isSimulationComplete) {
+              <span
+                class="result-badge"
+                [class.result-accepted]="simulation.accepted"
+                [class.result-rejected]="!simulation.accepted"
+              >
+                {{ simulation.accepted ? 'ACEPTADA' : 'RECHAZADA' }}
+              </span>
+            } @else {
+              <span class="result-badge result-running">EN CURSO</span>
+            }
+          </div>
+
+          <div class="macrostate-display">
+            <span>Estado{{ simulation.automatonType === 'AFND' ? 's' : '' }}</span>
+            <strong>{{ formatStates(currentStep?.afterStates ?? []) }}</strong>
+          </div>
+
+          @if (simulationMode === 'step') {
+            <div class="playback-controls">
+              <button type="button" (click)="restartSimulation()" [disabled]="!canGoBack">
+                Reiniciar
+              </button>
+              <button type="button" (click)="previousStep()" [disabled]="!canGoBack">
+                ← Anterior
+              </button>
+              <button type="button" class="next-button" (click)="nextStep()" [disabled]="!canAdvance">
+                Siguiente →
+              </button>
+            </div>
+          }
+        </article>
+
+        <article class="history-card">
+          <div class="history-heading">
+            <h3>Historial de configuraciones</h3>
+            <span>{{ visibleSteps.length }} / {{ simulation.steps.length }}</span>
+          </div>
+          <ol class="step-list">
+            @for (step of visibleSteps; track step.stepNumber) {
+              <li [class.current-step]="step.stepNumber === visibleStepIndex">
+                <span class="step-index">{{ step.stepNumber }}</span>
+                <div>
+                  <strong>{{ stepDescription(step) }}</strong>
+                  <p>
+                    {{ formatStates(step.beforeStates) }}
+                    <span aria-hidden="true">→</span>
+                    {{ formatStates(step.afterStates) }}
+                  </p>
+                  @if (step.symbol !== null && simulation.automatonType === 'AFND') {
+                    <small>
+                      Movimiento directo: {{ formatStates(step.directStates) }} · Clausura λ:
+                      {{ formatStates(step.afterStates) }}
+                    </small>
+                  }
+                </div>
+              </li>
+            }
+          </ol>
+        </article>
+      </div>
+    } @else {
+      <div class="simulation-empty">
+        <span aria-hidden="true">→</span>
+        <p>Introduce una cadena y elige el modo de simulación.</p>
+      </div>
+    }
+  </section>
+</main>

@@ -1,0 +1,186 @@
+:host {
+  --ink: #172033;
+  --muted: #667085;
+  --border: rgb(23 32 51 / 10%);
+  --surface: rgb(255 255 255 / 82%);
+  --blue: #006fd6;
+  --violet: #6d4aff;
+
+  display: block;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 12%, rgb(0 111 214 / 14%), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgb(109 74 255 / 12%), transparent 28rem),
+    #f6f7fb;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+}
+
+.portal-shell {
+  width: min(100% - 2rem, 76rem);
+  min-height: 100vh;
+  margin-inline: auto;
+  padding-bottom: 4rem;
+}
+
+.portal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.35rem;
+}
+
+.eyebrow,
+.hero-kicker,
+.card-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.brand {
+  display: inline-block;
+  margin-top: 0.2rem;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.docs-link {
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 55%);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.hero {
+  max-width: 54rem;
+  padding: clamp(4rem, 10vw, 8rem) 0 clamp(3rem, 7vw, 5rem);
+}
+
+.hero h1 {
+  max-width: 50rem;
+  margin: 0.8rem 0 1.25rem;
+  font-size: clamp(2.8rem, 8vw, 6.7rem);
+  line-height: 0.92;
+  letter-spacing: -0.065em;
+}
+
+.hero > p:last-child {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.practice-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 2.4rem);
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  background: var(--surface);
+  box-shadow: 0 1.5rem 4rem rgb(23 32 51 / 8%);
+  backdrop-filter: blur(1.25rem);
+}
+
+.practice-card::after {
+  position: absolute;
+  right: -5rem;
+  bottom: -7rem;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 50%;
+  background: var(--card-accent);
+  content: '';
+  filter: blur(0.5rem);
+  opacity: 0.12;
+}
+
+.practice-one {
+  --card-accent: var(--blue);
+}
+
+.practice-two {
+  --card-accent: var(--violet);
+}
+
+.card-number {
+  margin-bottom: 3.75rem;
+  color: var(--card-accent);
+  font-size: 0.8rem;
+  font-weight: 850;
+}
+
+.practice-card h2 {
+  max-width: 25rem;
+  margin: 0.65rem 0 1rem;
+  font-size: clamp(1.8rem, 4vw, 2.65rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.practice-card > p:not(.card-label) {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.practice-card ul {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1.5rem 0 2rem;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.card-action {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--card-accent);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.card-action span {
+  transition: transform 150ms ease;
+}
+
+.card-action:hover span {
+  transform: translateX(0.25rem);
+}
+
+@media (max-width: 48rem) {
+  .practice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.7rem, 15vw, 5rem);
+  }
+}
+
+@media (max-width: 32rem) {
+  .portal-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -1,5 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run site:build",
-  "outputDirectory": "dist/practica-1-amc/browser"
+  "outputDirectory": "dist/practica-1-amc/browser",
+  "rewrites": [
+    { "source": "/practica-1", "destination": "/index.html" },
+    { "source": "/practica-2", "destination": "/index.html" }
+  ]
 }
