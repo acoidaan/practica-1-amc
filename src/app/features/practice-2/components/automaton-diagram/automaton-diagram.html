@@ -1,0 +1,112 @@
+<section class="diagram-shell" aria-label="Representación gráfica del autómata">
+  <div class="diagram-toolbar">
+    <div>
+      <strong>Diagrama interactivo</strong>
+      <span>Arrastra los estados para reorganizarlos.</span>
+    </div>
+    <button type="button" (click)="resetLayout()">Reordenar automáticamente</button>
+  </div>
+
+  <div class="canvas-frame">
+    <svg
+      #diagramSvg
+      [attr.viewBox]="viewBox"
+      role="img"
+      [attr.aria-label]="'Diagrama del ' + definition.type"
+      (pointermove)="onPointerMove($event)"
+      (pointerup)="onPointerUp($event)"
+      (pointercancel)="onPointerUp($event)"
+    >
+      <defs>
+        <marker
+          id="automaton-arrow"
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z"></path>
+        </marker>
+        <marker
+          id="automaton-arrow-active"
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z"></path>
+        </marker>
+      </defs>
+
+      <path class="initial-arrow" [attr.d]="initialArrowPath()" marker-end="url(#automaton-arrow)"></path>
+      <text
+        class="initial-label"
+        [attr.x]="positionOf(definition.initialState).x - 71"
+        [attr.y]="positionOf(definition.initialState).y - 10"
+      >
+        inicio
+      </text>
+
+      <g class="edges" aria-hidden="true">
+        @for (edge of edges; track edge.id) {
+          <path
+            class="transition-edge"
+            [class.transition-edge-active]="isEdgeActive(edge)"
+            [attr.d]="edgePath(edge)"
+            [attr.marker-end]="
+              isEdgeActive(edge)
+                ? 'url(#automaton-arrow-active)'
+                : 'url(#automaton-arrow)'
+            "
+          ></path>
+          <text
+            class="transition-label"
+            [class.transition-label-active]="isEdgeActive(edge)"
+            [attr.x]="edgeLabelPosition(edge).x"
+            [attr.y]="edgeLabelPosition(edge).y"
+          >
+            {{ edgeLabel(edge) }}
+          </text>
+        }
+      </g>
+
+      <g class="states">
+        @for (state of definition.states; track state) {
+          <g
+            class="state-node"
+            [class.state-node-active]="isStateActive(state)"
+            [class.state-node-initial]="state === definition.initialState"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="
+              'Estado ' +
+              state +
+              (state === definition.initialState ? ', inicial' : '') +
+              (isFinalState(state) ? ', final' : '')
+            "
+            [attr.transform]="'translate(' + positionOf(state).x + ' ' + positionOf(state).y + ')'"
+            (pointerdown)="onPointerDown($event, state)"
+            (keydown)="onStateKeydown($event, state)"
+          >
+            <title>{{ state }}</title>
+            <circle class="state-circle" r="31"></circle>
+            @if (isFinalState(state)) {
+              <circle class="final-circle" r="24"></circle>
+            }
+            <text class="state-label" [attr.font-size]="stateFontSize(state)">{{ state }}</text>
+          </g>
+        }
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-legend" aria-label="Leyenda">
+    <span><i class="legend-state"></i> Estado</span>
+    <span><i class="legend-final"></i> Final</span>
+    <span><i class="legend-active"></i> Configuración o transición activa</span>
+  </div>
+</section>

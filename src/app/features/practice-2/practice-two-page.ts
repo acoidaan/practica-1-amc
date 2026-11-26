@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { downloadTextFile } from '../../browser/download-file';
+import { AutomatonDiagram } from './components/automaton-diagram/automaton-diagram';
 import { createFiniteAutomaton } from './core/automata';
 import { AutomatonParseError, parseAutomaton } from './core/automaton-parser';
 import type {
@@ -44,7 +45,7 @@ type SimulationMode = 'full' | 'step';
 /** Complete browser coordinator for loading, validating and simulating Practice 2 automata. */
 @Component({
   selector: 'app-practice-two-page',
-  imports: [FormsModule, RouterLink],
+  imports: [AutomatonDiagram, FormsModule, RouterLink],
   styleUrl: './practice-two-page.css',
   templateUrl: './practice-two-page.html',
 })

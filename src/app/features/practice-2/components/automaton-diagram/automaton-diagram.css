@@ -1,0 +1,234 @@
+:host {
+  display: block;
+}
+
+.diagram-shell {
+  overflow: hidden;
+  border: 1px solid var(--border, rgb(23 25 35 / 11%));
+  border-radius: 1.7rem;
+  background: rgb(255 255 255 / 90%);
+  box-shadow: var(--shadow, 0 1.2rem 3.5rem rgb(23 25 35 / 7%));
+}
+
+.diagram-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border, rgb(23 25 35 / 11%));
+}
+
+.diagram-toolbar > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.diagram-toolbar strong {
+  font-size: 0.9rem;
+}
+
+.diagram-toolbar span {
+  color: var(--muted, #667085);
+  font-size: 0.75rem;
+}
+
+.diagram-toolbar button {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border, rgb(23 25 35 / 11%));
+  border-radius: 0.75rem;
+  background: white;
+  color: var(--ink, #171923);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.diagram-toolbar button:hover,
+.diagram-toolbar button:focus-visible {
+  outline: none;
+  border-color: rgb(98 70 223 / 35%);
+  background: rgb(98 70 223 / 9%);
+  color: #4931bc;
+}
+
+.canvas-frame {
+  overflow: hidden;
+  background:
+    linear-gradient(rgb(98 70 223 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(98 70 223 / 4%) 1px, transparent 1px),
+    radial-gradient(circle at center, white, #f8f8fc);
+  background-size: 2rem 2rem, 2rem 2rem, auto;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  min-height: 31rem;
+  max-height: 42rem;
+  touch-action: none;
+  user-select: none;
+}
+
+.transition-edge,
+.initial-arrow {
+  fill: none;
+  stroke: #8a8f9d;
+  stroke-linecap: round;
+  stroke-width: 2.2;
+  transition:
+    stroke 150ms ease,
+    stroke-width 150ms ease,
+    filter 150ms ease;
+}
+
+.transition-edge-active {
+  stroke: #e87500;
+  stroke-width: 4.5;
+  filter: drop-shadow(0 0 0.3rem rgb(232 117 0 / 38%));
+}
+
+#automaton-arrow path {
+  fill: #8a8f9d;
+}
+
+#automaton-arrow-active path {
+  fill: #e87500;
+}
+
+.transition-label,
+.initial-label {
+  fill: #4a4f5d;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 13px;
+  font-weight: 750;
+  paint-order: stroke;
+  stroke: rgb(255 255 255 / 94%);
+  stroke-linejoin: round;
+  stroke-width: 8px;
+  text-anchor: middle;
+}
+
+.transition-label-active {
+  fill: #b14f00;
+  font-weight: 900;
+}
+
+.initial-label {
+  fill: #667085;
+  font-family: inherit;
+  font-size: 11px;
+  stroke-width: 6px;
+}
+
+.state-node {
+  cursor: grab;
+  outline: none;
+}
+
+.state-node:active {
+  cursor: grabbing;
+}
+
+.state-circle,
+.final-circle {
+  fill: #ffffff;
+  stroke: #333847;
+  stroke-width: 2.5;
+  transition:
+    fill 150ms ease,
+    stroke 150ms ease,
+    stroke-width 150ms ease,
+    filter 150ms ease;
+}
+
+.final-circle {
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.state-node:hover .state-circle,
+.state-node:focus-visible .state-circle {
+  fill: #f2efff;
+  stroke: #6246df;
+}
+
+.state-node:focus-visible .state-circle {
+  stroke-width: 4;
+}
+
+.state-node-active .state-circle {
+  fill: #fff0df;
+  stroke: #e87500;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 0.45rem rgb(232 117 0 / 28%));
+}
+
+.state-node-active .final-circle {
+  stroke: #e87500;
+  stroke-width: 2.5;
+}
+
+.state-label {
+  fill: #171923;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-weight: 850;
+  pointer-events: none;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.diagram-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.85rem 1.2rem;
+  border-top: 1px solid var(--border, rgb(23 25 35 / 11%));
+  color: var(--muted, #667085);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.diagram-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.diagram-legend i {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid #333847;
+  border-radius: 50%;
+  background: white;
+}
+
+.diagram-legend .legend-final {
+  box-shadow: inset 0 0 0 2px white, inset 0 0 0 3px #333847;
+}
+
+.diagram-legend .legend-active {
+  border-color: #e87500;
+  background: #fff0df;
+}
+
+@media (max-width: 42rem) {
+  .diagram-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  svg {
+    min-height: 25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition-edge,
+  .state-circle,
+  .final-circle {
+    transition: none;
+  }
+}

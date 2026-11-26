@@ -22,11 +22,32 @@
     </p>
   </section>
 
+  @if (automaton; as process) {
+    <section class="diagram-section" aria-labelledby="diagram-title">
+      <div class="section-heading-wide">
+        <div>
+          <p class="section-number">01 · Representación</p>
+          <h2 id="diagram-title">Autómata activo</h2>
+        </div>
+        <p>
+          El diagrama es interactivo: puedes arrastrar los estados y las transiciones activas se
+          resaltan durante la simulación.
+        </p>
+      </div>
+      <app-automaton-diagram
+        [definition]="process.definition"
+        [activeStates]="currentStep?.afterStates ?? [process.definition.initialState]"
+        [activeTransitionIds]="currentStep?.transitionIds ?? []"
+        [activeLambdaTransitionIds]="currentStep?.lambdaTransitionIds ?? []"
+      />
+    </section>
+  }
+
   <section class="workspace" aria-label="Definición del autómata">
     <article class="panel source-panel">
       <div class="panel-heading">
         <div>
-          <p class="section-number">01 · Definición</p>
+          <p class="section-number">02 · Definición</p>
           <h2>Autómata de entrada</h2>
         </div>
         <span class="source-badge" [class.source-badge-dirty]="isSourceDirty">
@@ -81,7 +102,7 @@
     <article class="panel summary-panel">
       <div class="panel-heading">
         <div>
-          <p class="section-number">02 · Modelo activo</p>
+          <p class="section-number">03 · Detalle técnico</p>
           <h2>Resumen validado</h2>
         </div>
         @if (automaton) {
@@ -178,7 +199,7 @@
   <section class="simulation-section" aria-labelledby="simulation-title">
     <div class="section-heading-wide">
       <div>
-        <p class="section-number">03 · Simulación</p>
+        <p class="section-number">04 · Simulación</p>
         <h2 id="simulation-title">Cadena de entrada</h2>
       </div>
       <p>La ejecución completa y el reproductor paso a paso utilizan exactamente la misma traza.</p>
